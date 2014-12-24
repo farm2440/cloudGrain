@@ -1,0 +1,37 @@
+POST / HTTP/1.1
+Content-Length: 269
+Connection: Keep-Alive
+Accept-Encoding: gzip
+Accept-Language: en,*
+User-Agent: Mozilla/5.0
+Host: devicewebvarnaservice.azurewebsites.net
+Content-Type: application/octet-stream
+
+<string xmlns="http://schemas.microsoft.com/2003/10/Serialization/">s_stavrev@hotmail.com;10E36F67-570D-4B82-B4EB-B20831AAAD5B;494F5931-0A06-45BC-84CB-8F6FD3D67FCD;21;2014-12-03T18:38:35.5908503Z;42;2014-12-03T18:38:35.5929012Z;46;2014-12-03T18:38:35.5948991Z;<\string>HTTP/1.1 405 Method Not Allowed
+Allow: GET, HEAD, OPTIONS, TRACE
+Content-Length: 101
+Content-Type: text/html
+Server: Microsoft-IIS/8.0
+X-Powered-By: ASP.NET
+Set-Cookie: ARRAffinity=ded0d055400a7e4b57534b6ca457a1ff816eeae8c7ce6eccee965abe10e8225f;Path=/;Domain=devicewebvarnaservice.azurewebsites.net
+Date: Sat, 13 Dec 2014 00:57:42 GMT
+
+The page you are looking for cannot be displayed because an invalid method (HTTP verb) is being used.POST / HTTP/1.1
+Cookie: ARRAffinity=ded0d055400a7e4b57534b6ca457a1ff816eeae8c7ce6eccee965abe10e8225f
+Content-Length: 269
+Connection: Keep-Alive
+Accept-Encoding: gzip
+Accept-Language: en,*
+User-Agent: Mozilla/5.0
+Host: devicewebvarnaservice.azurewebsites.net
+Content-Type: application/octet-stream
+
+<string xmlns="http://schemas.microsoft.com/2003/10/Serialization/">s_stavrev@hotmail.com;10E36F67-570D-4B82-B4EB-B20831AAAD5B;494F5931-0A06-45BC-84CB-8F6FD3D67FCD;21;2014-12-03T18:38:35.5908503Z;42;2014-12-03T18:38:35.5929012Z;46;2014-12-03T18:38:35.5948991Z;<\string>HTTP/1.1 405 Method Not Allowed
+Allow: GET, HEAD, OPTIONS, TRACE
+Content-Length: 101
+Content-Type: text/html
+Server: Microsoft-IIS/8.0
+X-Powered-By: ASP.NET
+Date: Sat, 13 Dec 2014 00:57:49 GMT
+
+The page you are looking for cannot be displayed because an invalid method (HTTP verb) is being used.

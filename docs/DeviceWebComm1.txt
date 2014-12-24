@@ -1,0 +1,22 @@
+POST /RestService/SimpleWriteSingleValueDeviceData HTTP/1.1
+Content-Type: text/xml;charset=utf-8
+Host: devicewebvarnaservice.azurewebsites.net
+Content-Length: 327
+Expect: 100-continue
+Connection: Close
+
+HTTP/1.1 100 Continue
+
+<string xmlns="http://schemas.microsoft.com/2003/10/Serialization/">julian_s@abv.bg;5FC99442-4686-44C3-9F14-02180BEF7D92;37B5B1BE-50DE-421C-A8D5-17DC360BBD9E;21;2014-12-03T18:38:35.5908503Z;42;2014-12-03T18:38:35.5929012Z;46;2014-12-03T18:38:35.5948991Z;17;2014-12-03T18:38:35.5969099Z;22;2014-12-03T18:38:35.5989109Z;</string>HTTP/1.1 200 OK
+Cache-Control: private
+Content-Length: 79
+Content-Type: text/xml; charset=utf-8
+Server: Microsoft-IIS/8.0
+Set-Cookie: ASP.NET_SessionId=t3ookxwyywttfl1rfokrheqh; path=/; HttpOnly
+X-AspNet-Version: 4.0.30319
+X-Powered-By: ASP.NET
+Set-Cookie: ARRAffinity=e23b971594f43946d084f33ddce6d96c95e6c63aa0fa002d988e0de09e6cb0ab;Path=/;Domain=devicewebvarnaservice.azurewebsites.net
+Date: Wed, 03 Dec 2014 18:38:43 GMT
+Connection: close
+
+<string xmlns="http://schemas.microsoft.com/2003/10/Serialization/">OK</string>
