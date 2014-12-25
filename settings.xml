@@ -6,34 +6,35 @@
 	<customerEmail>s_stavrev@hotmail.com</customerMail>
 	<customerId>10E36F67-570D-4B82-B4EB-B20831AAAD5B</customerId>
 
-	<controller rs485='1'> <!--Controller's address on RS-485 network adjusted with DIP switch-->
-	  <silo>Silo number 3</silo>
-	  <bus0>
-	     <sensor>
-		<rope>1</rope>
-		<level>1</level>
-		<mac>11-11-11</mac>
-		<guid>494F5931-0A06-45BC-84CB-8F6FD3D67FCD</guid>
-	     </sensor>
-	     <sensor>
-		<rope>1</rope>
-		<level>2</level>
-		<mac>22-22-22</mac>
-		<guid>22222222-0A06-45BC-84CB-8F6FD3D67FCD</guid>
-	     </sensor>
-	     <sensor>
-		<rope>1</rope>
-		<level>1</level>
-		<mac>33-33-33</mac>
-		<guid>33333333-0A06-45BC-84CB-8F6FD3D67FCD</guid>
-	     </sensor>
-	  </bus0>
+          <silo>Silo number 3</silo>
 
-	  <bus1>
-	  </bus1>
+            <controller rs485='1'> <!--Controller's address on RS-485 network adjusted with DIP switch-->
+              <bus0>
+                 <sensor>
+                    <rope>1</rope>
+                    <level>1</level>
+                    <mac>11-11-11</mac>
+                    <guid>494F5931-0A06-45BC-84CB-8F6FD3D67FCD</guid>
+                 </sensor>
+                 <sensor>
+                    <rope>1</rope>
+                    <level>2</level>
+                    <mac>22-22-22</mac>
+                    <guid>22222222-0A06-45BC-84CB-8F6FD3D67FCD</guid>
+                 </sensor>
+                 <sensor>
+                    <rope>1</rope>
+                    <level>1</level>
+                    <mac>33-33-33</mac>
+                    <guid>33333333-0A06-45BC-84CB-8F6FD3D67FCD</guid>
+                 </sensor>
+              </bus0>
 
-	  <bus2>
-	  </bus2>
-	<controller>
+              <bus1>
+              </bus1>
+
+              <bus2>
+              </bus2>
+            <controller>
 
 </cloudGrain>

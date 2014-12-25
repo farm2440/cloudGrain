@@ -3,7 +3,7 @@
 Worker::Worker(QObject *parent) :  QObject(parent)
 {
     connect(&tmr, SIGNAL(timeout()), this, SLOT(tick()));
-    tmr.start(1000);
+    tmr.start(10000);
     n=1;
 
     manager = new QNetworkAccessManager(this);
@@ -62,11 +62,11 @@ Worker::Worker(QObject *parent) :  QObject(parent)
 
 
     //Отваряне на сериен порт
+    uart1_dirRx();
     std::cout << "Opening serial port...";
     int h = sp.sp_open("/dev/ttyO1");
     if(h==-1) std::cout << " failed" << std::endl;
     else std::cout << " ok" << std::endl;
-
     h = sp.sp_setPort(B1200,8,SerialPort::PARITY_NONE,1);
     sp.sp_stopRxTimer();
 }
@@ -74,6 +74,13 @@ Worker::Worker(QObject *parent) :  QObject(parent)
 void Worker::tick(void)
 {
     std::cout << "tick " << n++ << std::endl;
+    //Serial Port
+    if(!sp.sp_isOpen()) std::cout << "Serial is not open!" << std::endl;
+    //za proba
+    uart1_dirTx();
+    sp.sp_write("tst 0 0\r\n");
+    uart1_dirRx();
+
 //Подготовка на данните
     QString strData = dataHeader;
     QString timestamp;
@@ -96,20 +103,13 @@ void Worker::tick(void)
     request.setRawHeader("Content-Type","text/xml;charset=utf-8");
 
     //if((n%7)==0) manager->post(request, params.encodedQuery());
-    if((n%7)==0) manager->post(request, data);
+    if((n%4)==0) manager->post(request, data);
 
 /* //GET
 //    if((n%5)==0)   manager->get(QNetworkRequest(QUrl("http://qt-project.org")));
 //        if((n%5)==0)   manager->get(QNetworkRequest(QUrl("http://www.etherino.net/index.html")));
   */
 
-    //Serial Port
-    if(sp.sp_isOpen()) sp.sp_write("Hello SP!\r\n");
-    else std::cout << "Serial is not open!" << std::endl;
-
-    //za proba
-    if(n%2) uart1_dirRx();
-    else uart1_dirTx();
 }
 
 
@@ -135,14 +135,15 @@ void Worker::uart1_dirRx()
 {
     std::fstream fs;
     fs.open("/sys/class/gpio/gpio115/value", std::fstream::out);
-    fs << "0";
-    fs.close();
+    fs << "1";
+    fs.close();    
 }
 
 void Worker::uart1_dirTx()
 {
     std::fstream fs;
     fs.open("/sys/class/gpio/gpio115/value", std::fstream::out);
-    fs << "1";
+    fs << "0";
     fs.close();
+    usleep(50000);
 }

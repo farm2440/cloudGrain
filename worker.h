@@ -11,6 +11,7 @@
 #include <QTime>
 #include <QDate>
 
+
 #include <QFile>
 #include <QtXml>
 
@@ -21,6 +22,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <unistd.h> //usleep()
 
 #include "serialport.h"
 #include "iniparser.h"
