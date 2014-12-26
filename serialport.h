@@ -25,9 +25,9 @@ public:
     int sp_close();
     bool sp_isOpen(); //return port state
 
-    int sp_write(char * data, int n_bytes); //sends n_bytes bytes of data
-    int sp_write(QString str); //sends string
-    int	sp_write(char c); //sends one character
+    int sp_write(char * data, int n_bytes, bool block); //sends n_bytes bytes of data
+    int sp_write(QString str,bool block); //sends string
+    int	sp_write(char c,bool block); //sends one character
     
     
     //read up to rxbuffer_size bytes into rxbuffer array. Retuns the actual number of the recieved bytes

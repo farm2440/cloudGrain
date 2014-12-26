@@ -37,22 +37,31 @@ int SerialPort::sp_close()
 //-----------------------------------------------------------------------
 bool SerialPort::sp_isOpen() { return isOpen; }
 //-----------------------------------------------------------------------
-int SerialPort::sp_write(char *data, int n_bytes)
+int SerialPort::sp_write(char *data, int n_bytes, bool block=false)
 {//sends n_bytes data. returns number of bytes sent. if error returns -1
+    int result;
     if(hport==-1) return -1;
-    return write(hport, data, n_bytes);
+    result = write(hport, data, n_bytes);
+    if(block) tcdrain(hport);
+    return result;
 }
 //-----------------------------------------------------------------------
-int SerialPort::sp_write(QString str)
+int SerialPort::sp_write(QString str, bool block=false)
 {//sends string. returns number of bytes sent. if error returns -1
+    int result;
     if(hport==-1) return -1;
-        return write(hport,str.toLatin1(),str.length());
+    result = write(hport,str.toLatin1(),str.length());
+    if(block) tcdrain(hport);
+    return result;
 }
 //-----------------------------------------------------------------------
-int	SerialPort::sp_write(char c)
+int	SerialPort::sp_write(char c, bool block = false)
 { //sends single char. returns 1 if OK. if error returns -1
+    int result;
     if(hport==-1) return -1;
-	return write(hport,&c,1);
+    result = write(hport,&c,1);
+    if(block) tcdrain(hport);
+    return result;
 }
 //-----------------------------------------------------------------------
 int SerialPort::sp_setPort(unsigned int device_speed,int data_bits, Parity parity, int stop_bits)

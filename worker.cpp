@@ -26,36 +26,41 @@ Worker::Worker(QObject *parent) :  QObject(parent)
     {
         xmlDoc.setContent(&xmlFile);
         xmlFile.close();
-/*
-        QDomElement root = docRx.documentElement();
+
+        QDomElement root = xmlDoc.documentElement();
         QString rootName = root.tagName();
+
+        qDebug() << "parsing xml file...";
+        qDebug() << "rootName=" << rootName;
         if(rootName!="cloudGrain") std::cout << "ERROR: Error parsing XML. Root element must be cloudGrain." << std::endl;
 
         QDomNodeList childNodesList = root.childNodes();
-        if(childNodesList.count()<2)
+        for(int i=0 ; i<childNodesList.count() ; i++)
         {
-            qDebug() << "ERR: Error parsing XML. Child nodes missing.";
-            return;
-        }
+            QDomNode node = childNodesList.at(i);
+            QDomElement elm= node.toElement();            
+            qDebug() << "node:" << elm.tagName() << " value:" << elm.text();
 
-        //base
-        int base;
-        QDomNode baseNode = childNodesList.at(0);
-        QDomElement  baseElement = baseNode.toElement();
-        if(baseElement.tagName() != "base")
-        {
-            qDebug() << "ERR: Error parsing XML. First tag must be <base>.";
-            return;
-        }
-        else
-        {
-            base = baseElement.text().toInt(&ok);
-            if(!ok)
+            //Данни за силоза
+            if(elm.tagName()=="silo")
             {
-                qDebug() << "ERR: Error parsing XML. Failed parsing base.";
-                return;
+                QString siloName = elm.attribute("name","N/A");
+                QString siloLocation = elm.attribute("location","N/A");
+                qDebug() << "silo name:" << siloName << "  location:" << siloLocation;
+                QDomNodeList controllers = node.childNodes();
+                //Извличане на данните за контролерите на силоза
+                for(int j=0 ; j< controllers.count() ; j++)
+                {
+                    QDomNode nodeCont = controllers.at(j);
+                    QDomElement elmCont = nodeCont.toElement();
+                    int address = elmCont.attribute("rs485","-1").toInt();
+                    QString version = elmCont.attribute("version","N/A");
+                    qDebug() << "   controller address:" << address << " firmware version:" << version;
+                    //Извличане на данните за сензорите от трите 1-wire шини
+                    QDomNodeList buses = nodeCont.childNodes();
+                }
             }
-        }*/
+        }
     }
 
     //край зареждане на параметрите от settings.xml
@@ -78,7 +83,7 @@ void Worker::tick(void)
     if(!sp.sp_isOpen()) std::cout << "Serial is not open!" << std::endl;
     //za proba
     uart1_dirTx();
-    sp.sp_write("tst 0 0\r\n");
+    sp.sp_write("tst 0 0\r\n",true);
     uart1_dirRx();
 
 //Подготовка на данните
@@ -135,7 +140,7 @@ void Worker::uart1_dirRx()
 {
     std::fstream fs;
     fs.open("/sys/class/gpio/gpio115/value", std::fstream::out);
-    fs << "1";
+    fs << "0";
     fs.close();    
 }
 
@@ -143,7 +148,7 @@ void Worker::uart1_dirTx()
 {
     std::fstream fs;
     fs.open("/sys/class/gpio/gpio115/value", std::fstream::out);
-    fs << "0";
+    fs << "1";
     fs.close();
-    usleep(50000);
+    usleep(5000);
 }
