@@ -29,8 +29,27 @@
 
 struct Settings
 {
-    QString serialPortName;
+    QString serialPort;
     QString postURL;
+    QString customer;
+    QString id;
+    QString email;
+    QString siloName;
+    QString siloLocation;
+
+    QByteArray controllers; //съдържа RS-485 адресите на свързаните контролери
+};
+
+struct Sensor
+{
+    QString mac;
+    QString rope;
+    QString level;
+    QString guid;
+    QString secret;
+
+    QString value;
+    QString timestamp;
 };
 
 class Worker : public QObject
@@ -46,12 +65,15 @@ public:
     //За POST изпращане на данни към облака
     QNetworkAccessManager *manager;
     QString dataHeader;
-    QByteArray data;
 
     SerialPort sp; //През този порт става връзката по RS-485 към контролерите
+    char rxbuf[200];
 
     QDomDocument xmlDoc; //файлът settings.xml се зарежда в този обект и садържа индивидуалните потребителски настройки
     Settings settings;
+    QList<Sensor> listSensors;
+
+
 signals:
 
 public slots:

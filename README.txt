@@ -83,3 +83,22 @@ git add README.md
 git commit -m "first commit"
 git remote add origin https://github.com/farm2440/cloudGrain.git
 git push -u origin master
+
+------------------------------------------------------------------------------------
+//POST
+    //http://qt-project.org/doc/note_revisions/84/235/view
+    //QUrl params;
+    //params.addQueryItem("key", "value");
+    //params.addQueryItem("another_key", "äöutf8-value");
+
+    QUrl site("http://devicewebvarnaservice.azurewebsites.net/RestService/SimpleWriteSingleValueDeviceData");
+    QNetworkRequest request(site);
+    request.setRawHeader("Content-Type","text/xml;charset=utf-8");
+
+    //if((n%7)==0) manager->post(request, params.encodedQuery());
+    if((n%4)==0) manager->post(request, data);
+
+/* //GET
+//    if((n%5)==0)   manager->get(QNetworkRequest(QUrl("http://qt-project.org")));
+//        if((n%5)==0)   manager->get(QNetworkRequest(QUrl("http://www.etherino.net/index.html")));
+  */

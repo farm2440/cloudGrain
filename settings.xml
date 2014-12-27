@@ -5,8 +5,7 @@
         <id>10E36F67-570D-4B82-B4EB-B20831AAAD5B</id>
         <email>s_stavrev@hotmail.com</email>
         <silo  name="Silo number 3" location="Grain Plant Suvorovo">
-             <controller rs485="1" version="1">
-                <bus0 active="1">
+             <controller rs485="0" version="1">
                   <sensor>
                       <rope>1</rope>
                       <level>3</level>
@@ -28,11 +27,7 @@
                       <guid>EB9E5DB1-87D7-4302-A029-A9D75F166EB1</guid>
                       <secret>35249FF2-9B48-40CE-AE79-85021FCBFD54</secret>
                   </sensor>
-                </bus0>
-                <bus1 active="0">
-                </bus1>
-                <bus2 active="0">
-                </bus2>
              </controller>
+
         </silo>
 </cloudGrain>

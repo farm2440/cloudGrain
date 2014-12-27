@@ -86,7 +86,7 @@
     <value type="QString">GDMSESSION=ubuntu</value>
     <value type="QString">GDM_LANG=en_US</value>
     <value type="QString">GIO_LAUNCHED_DESKTOP_FILE=/home/svilen/.local/share/applications/Nokia-QtCreator.desktop</value>
-    <value type="QString">GIO_LAUNCHED_DESKTOP_FILE_PID=2891</value>
+    <value type="QString">GIO_LAUNCHED_DESKTOP_FILE_PID=6432</value>
     <value type="QString">GNOME_DESKTOP_SESSION_ID=this-is-deprecated</value>
     <value type="QString">GNOME_KEYRING_CONTROL=/run/user/1000/keyring-7LWb4h</value>
     <value type="QString">GNOME_KEYRING_PID=1789</value>
@@ -170,7 +170,7 @@
     <value type="QString">GDMSESSION=ubuntu</value>
     <value type="QString">GDM_LANG=en_US</value>
     <value type="QString">GIO_LAUNCHED_DESKTOP_FILE=/home/svilen/.local/share/applications/Nokia-QtCreator.desktop</value>
-    <value type="QString">GIO_LAUNCHED_DESKTOP_FILE_PID=2891</value>
+    <value type="QString">GIO_LAUNCHED_DESKTOP_FILE_PID=6432</value>
     <value type="QString">GNOME_DESKTOP_SESSION_ID=this-is-deprecated</value>
     <value type="QString">GNOME_KEYRING_CONTROL=/run/user/1000/keyring-7LWb4h</value>
     <value type="QString">GNOME_KEYRING_PID=1789</value>
@@ -251,7 +251,7 @@
     <value type="QString">GDMSESSION=ubuntu</value>
     <value type="QString">GDM_LANG=en_US</value>
     <value type="QString">GIO_LAUNCHED_DESKTOP_FILE=/home/svilen/.local/share/applications/Nokia-QtCreator.desktop</value>
-    <value type="QString">GIO_LAUNCHED_DESKTOP_FILE_PID=2891</value>
+    <value type="QString">GIO_LAUNCHED_DESKTOP_FILE_PID=6432</value>
     <value type="QString">GNOME_DESKTOP_SESSION_ID=this-is-deprecated</value>
     <value type="QString">GNOME_KEYRING_CONTROL=/run/user/1000/keyring-7LWb4h</value>
     <value type="QString">GNOME_KEYRING_PID=1789</value>
