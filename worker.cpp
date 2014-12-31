@@ -4,7 +4,6 @@ Worker::Worker(QObject *parent) :  QObject(parent)
 {
     connect(&tmr, SIGNAL(timeout()), this, SLOT(tick()));
     tmr.setSingleShot(true);
-    tmr.start(5000);
     n=1;
 
     //Зареждата се настройките от settings.xml
@@ -39,6 +38,12 @@ Worker::Worker(QObject *parent) :  QObject(parent)
             if(elm.tagName()=="id") settings.id=elm.text();
             if(elm.tagName()=="email") settings.email=elm.text();
 
+            if(elm.tagName()=="readPeriod") settings.readPeriod=elm.text().toInt()*1000;
+            if(settings.readPeriod<1000) settings.readPeriod = 1000;
+
+            if(elm.tagName()=="postPeriod") settings.postPeriod=elm.text().toInt();
+            if(settings.postPeriod<1) settings.postPeriod=1;
+
             //Данни за силоза
             if(elm.tagName()=="silo")
             {
@@ -59,7 +64,7 @@ Worker::Worker(QObject *parent) :  QObject(parent)
                     qDebug() << "   controller address:" << address << " firmware version:" << version;
                     //Извличане на данните за сензорите от трите 1-wire шини
                     QDomNodeList sensors = nodeCont.childNodes();
-                    qDebug() << "   there are " << sensors.count() << " sensors on controller " << address;
+                    qDebug() << "   there are " << sensors.count() << " sensors on controller " << address << "\r\n";
                     for (int n=0 ; n< sensors.count() ; n++)
                     {
                         QString mac,rope,level,guid,secret;
@@ -88,11 +93,27 @@ Worker::Worker(QObject *parent) :  QObject(parent)
                         s.value="N/A";
                         s.timestamp="N/A";
                         listSensors.append(s);
+                        //В списъците listRopes И listLevels се добавя ниво и номер на въже ако още не е добавено
+                        if(!listRopes.contains(s.rope.toInt())) listRopes.append(s.rope.toInt());
+                        if(!listLevels.contains(s.level.toInt())) listLevels.append(s.level.toInt());
                     }
                 }
             }
         }
     }
+
+    qDebug() << "readPeriod=" << settings.readPeriod;
+    qDebug() << "postPeriod=" << settings.postPeriod;
+
+    //Сортират се номерата на нивата и въжетата. Ползват се при генериране на данните за RAM файла
+//    for(int i=0 ; i< listLevels.count() ; i++) qDebug() << "listLevels[" << i << "]=" << listLevels[i];
+//    for(int i=0 ; i< listRopes.count() ; i++) qDebug() << "listRopes[" << i << "]=" << listRopes[i];
+    qDebug() << "sorting....";
+    qSort(listLevels.begin(), listLevels.end(), qGreater<int>());
+    qSort(listRopes);
+    for(int i=0 ; i< listLevels.count() ; i++) qDebug() << "listLevels[" << i << "]=" << listLevels[i];
+    for(int i=0 ; i< listRopes.count() ; i++) qDebug() << "listRopes[" << i << "]=" << listRopes[i];
+    qDebug() << " ";
     //край зареждане на параметрите от settings.xml
 
     //Отваряне на сериен порт
@@ -109,13 +130,14 @@ Worker::Worker(QObject *parent) :  QObject(parent)
 
     dataHeader="<string xmlns=\"http://schemas.microsoft.com/2003/10/Serialization/\">";
     dataHeader += (settings.email + ";");
+
+    tmr.start(5000);
 }
 
 void Worker::tick(void)
 {
     QTime time;
-    QString rxdata;
-    QString timestamp;
+    QString rxdata;    
     QNetworkRequest request(settings.postURL);
     QByteArray postData;
 
@@ -123,7 +145,7 @@ void Worker::tick(void)
     //Serial Port
     if(!sp.sp_isOpen()) std::cout << "Serial is not open!" << std::endl;
 
-    timestamp += QDate::currentDate().toString("yyyy-MM-dT");
+    timestamp = QDate::currentDate().toString("yyyy-MM-dT");
     timestamp += QTime::currentTime().toString("hh:mm:ss.zzzZ;");
 
     //Прочитане на сензорите
@@ -174,7 +196,9 @@ void Worker::tick(void)
         }
     }
 
-//Подготовка на данните
+    exportRamFile();
+
+//Подготовка на данните  за POST
     QString strData = dataHeader;
     //DUMMY SENSOR
     strData +="10E36F67-570D-4B82-B4EB-B20831AAAD5B;"; //guid - dummy sensor
@@ -185,7 +209,7 @@ void Worker::tick(void)
     postData=strData.toUtf8();
 
     request.setRawHeader("Content-Type","text/xml;charset=utf-8");
-    if((n%4)==0)
+    if((n % settings.postPeriod)==0)
     {
         manager->post(request, postData);
         qDebug() << "POST:" << strData;
@@ -203,14 +227,14 @@ void Worker::tick(void)
         strData +="</string>";
         postData=strData.toUtf8();
         request.setRawHeader("Content-Type","text/xml;charset=utf-8");
-        if((n%4)==0)
+        if((n % settings.postPeriod)==0)
         {
             manager->post(request, postData);
             qDebug() << "POST:" << strData;
         }
     }
 
-    tmr.start(4000);
+    tmr.start(settings.readPeriod);
 }
 
 
@@ -247,4 +271,55 @@ void Worker::uart1_dirTx()
     fs << "1";
     fs.close();
     usleep(5000);
+}
+
+bool Worker::exportRamFile()
+{//връща true при успех иначе false
+    /*в /mnt/ramdisk е монтирана от стартиращия скрипт RAM-базирана файлова система.
+      Файлът /mnt/ramdisk/sensors съдържа данните за настройки и актуални стойности на сензорите
+    */
+    QFile ramFile("/mnt/ramdisk/sensors");
+    ramFile.open(QIODevice::WriteOnly);
+
+    QString data= "Company: " + settings.customer + "<br>\r\n";
+    data += ("Silo: " + settings.siloName + "<br>\r\n");
+    data += ("Location: " + settings.siloLocation + "<br><br>\r\n");
+    data += ("Timestamp: " + timestamp + "<br><br><hl><br>\r\n");
+
+    data +=  "<table  border=\"1\"> \r\n";
+    data += ("  <caption>Sensor values:</caption>\r\n");
+
+    //първи ред в таблицата - хедъри
+    data += ("<tr><th>level/rope</th>");
+    for(int r=0 ; r<listRopes.count() ; r++) data+=("<th>" + QString::number(listRopes[r]) + "</th>");
+    data += "</tr>\r\n";
+    //Останалите редове в таблицата - първа колона е номер на ниво останалите са температура на датчиците
+    for(int l=0 ; l<listLevels.count() ; l++)
+    {
+        data += ("<tr><th>" + QString::number(listLevels[l]) +"</th>");//Номер на ниво
+        for(int r=0 ; r<listRopes.count() ; r++)
+        {
+            data += ("<td>" + getSensorValue(listRopes[r],listLevels[l])+ "</td>");
+        }
+        data += "</tr>\r\n";
+    }
+    data += "</table>";
+    ramFile.write(data.toLatin1());
+    ramFile.close();
+    return true;
+}
+
+QString Worker::getSensorValue(int rope, int level)
+{//Връща стойността за сензор от listSensors
+    foreach(Sensor s, listSensors)
+    {
+        if((s.rope.toInt()==rope) && (s.level.toInt()==level))
+        {
+            qDebug() << "rope:" << rope << "  level:" <<level << "  value:" <<s.value;
+            return s.value;
+        }
+    }
+
+
+    return "---";
 }

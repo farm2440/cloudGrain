@@ -59,17 +59,53 @@ echo "out" > direction
 cat value
 echo "1" > value
 
-
-COPY-PASTE СЛЕД СТАРТ:
+**************************
+* COPY-PASTE СЛЕД СТАРТ: *
+**************************
 echo BB-UART1 > /sys/devices/bone_capemgr.*/slots
 echo STIV-GPIO > /sys/devices/bone_capemgr.*/slots
 echo 49 > /sys/class/gpio/export
 echo 115 > /sys/class/gpio/export
 echo "out" > /sys/class/gpio/gpio115/direction
 echo "out" > /sys/class/gpio/gpio49/direction
+mkdir /mnt/ramdisk
+mount -t tmpfs -o size=4m tmpfs /mnt/ramdisk
+touch /mnt/ramdisk/sensors
+echo "No data available or service is not running" > /mnt/ramdisk/sensors
+ln -s /mnt/ramdisk/sensors /www/pages/sensors.html
 
 Виж връзката как се осигурява изпълнение със стартирането:
 http://tenderlovemaking.com/2014/01/19/enabling-ttyo1-on-beaglebone.html
+------------------------------------------------------------------------------------
+ИНСТАЛИРАНЕ НА RAM ФАЙЛОВА СИСТЕМА ЗА ОБМЕН С PHP
+mkdir /mnt/ramdisk
+mount -t tmpfs -o size=4m tmpfs /mnt/ramdisk
+touch /mnt/ramdisk/sensors
+ln -s /mnt/ramdisk/sensors /www/pages/sensors.html
+------------------------------------------------------------------------------------
+СПИРАНЕ НА ИЗЛИШНИ СЪРВИСИ И ИНСТАЛИРАНЕ НА lighthttpd и php
+
+http://www.element14.com/community/community/designcenter/single-board-computers/next-gen_beaglebone/blog/2013/11/20/beaglebone-web-server--setup
+
+1.Install Lighttpd
+opkg update
+opkg install lighttpd lighttpd-module-fastcgi
+
+2.Disable Preloaded Services
+systemctl disable cloud9.service
+systemctl disable gateone.service
+systemctl disable bonescript.service
+systemctl disable bonescript.socket
+systemctl disable bonescript-autorun.service
+systemctl disable avahi-daemon.service
+systemctl disable gdm.service
+systemctl disable mpd.service
+
+3.restart
+shutdown -r now
+
+4. Install PHP
+(виж горната уеб връзка)
 ------------------------------------------------------------------------------------
 Sensor: FIRST
 Id: 10E36F67-570D-4B82-B4EB-B20831AAAD5B

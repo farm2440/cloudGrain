@@ -11,7 +11,6 @@
 #include <QTime>
 #include <QDate>
 
-
 #include <QFile>
 #include <QtXml>
 
@@ -38,6 +37,8 @@ struct Settings
     QString siloLocation;
 
     QByteArray controllers; //съдържа RS-485 адресите на свързаните контролери
+    int readPeriod; //секунди между две прочитания на контролера
+    int postPeriod; //през колко прочитания на контролера да се пращат данни в Интернет
 };
 
 struct Sensor
@@ -72,6 +73,10 @@ public:
     QDomDocument xmlDoc; //файлът settings.xml се зарежда в този обект и садържа индивидуалните потребителски настройки
     Settings settings;
     QList<Sensor> listSensors;
+    QList<int> listRopes;// Списък с номерата на въжетата прочетени от settings.xml
+    QList<int> listLevels;// Списък с нивата на сензорите прочетени от settings.xml
+                          //най-долния сензор е ниво 0 и растат нагоре
+    QString timestamp; // Дата/час на последното прочитане на сензорите
 
 
 signals:
@@ -83,6 +88,9 @@ public slots:
 
     void tick(void);
     void replyFinished(QNetworkReply* reply);
+
+    bool exportRamFile(); //записва актуални данни в /mnt/ramdisk/sensors
+    QString getSensorValue(int rope, int level); //Връща стойността за сензор от listSensors
 };
 
 #endif // WORKER_H

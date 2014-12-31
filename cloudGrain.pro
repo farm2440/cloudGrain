@@ -12,7 +12,8 @@ SOURCES += main.cpp \
     worker.cpp \
     serialport.cpp
 OTHER_FILES += README.txt \
-    settings.xml
+    settings.xml \
+    www/sensors.php
 HEADERS += definitions.h \
     worker.h \
     serialport.h
