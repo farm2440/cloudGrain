@@ -1,24 +1,20 @@
 <!DOCTYPE QtCreatorProject>
 <qtcreator>
  <data>
+  <variable>RunConfiguration0-Arguments</variable>
+  <valuelist type="QVariantList"/>
+ </data>
+ <data>
   <variable>RunConfiguration0-BaseEnvironmentBase</variable>
   <value type="int">2</value>
  </data>
  <data>
-  <variable>RunConfiguration0-CommandLineArguments</variable>
-  <valuelist type="QVariantList"/>
- </data>
- <data>
-  <variable>RunConfiguration0-ProFile</variable>
-  <value type="QString">cloudGrain.pro</value>
+  <variable>RunConfiguration0-Executable</variable>
+  <value type="QString"></value>
  </data>
  <data>
   <variable>RunConfiguration0-RunConfiguration.name</variable>
-  <value type="QString">cloudGrain</value>
- </data>
- <data>
-  <variable>RunConfiguration0-UseDyldImageSuffix</variable>
-  <value type="bool">false</value>
+  <value type="QString">Custom Executable</value>
  </data>
  <data>
   <variable>RunConfiguration0-UseTerminal</variable>
@@ -29,20 +25,20 @@
   <valuelist type="QVariantList"/>
  </data>
  <data>
+  <variable>RunConfiguration0-UserName</variable>
+  <value type="QString"></value>
+ </data>
+ <data>
   <variable>RunConfiguration0-UserSetName</variable>
   <value type="bool">false</value>
  </data>
  <data>
-  <variable>RunConfiguration0-UserSetWorkingDirectory</variable>
-  <value type="bool">false</value>
- </data>
- <data>
-  <variable>RunConfiguration0-UserWorkingDirectory</variable>
-  <value type="QString"></value>
+  <variable>RunConfiguration0-WorkingDirectory</variable>
+  <value type="QString">$BUILDDIR</value>
  </data>
  <data>
   <variable>RunConfiguration0-type</variable>
-  <value type="QString">Qt4ProjectManager.Qt4RunConfiguration</value>
+  <value type="QString">ProjectExplorer.CustomExecutableRunConfiguration</value>
  </data>
  <data>
   <variable>activeRunConfiguration</variable>
@@ -143,7 +139,7 @@
     <value type="QString">XMODIFIERS=@im=ibus</value>
    </valuelist>
    <valuelist key="abstractProcess.arguments" type="QVariantList">
-    <value type="QString">/home/svilen/workQte/cloudGrain/cloudGrain.pro</value>
+    <value type="QString">/home/svilen/workQte/cloudGrain/qserialdevice/src/src.pro</value>
     <value type="QString">-spec</value>
     <value type="QString">/new_disk/Hiteg/qt/build/mkspecs/qws/linux-arm-g++</value>
     <value type="QString">-r</value>
@@ -151,7 +147,7 @@
    </valuelist>
    <value key="abstractProcess.command" type="QString">/new_disk/Hiteg/qt/build/bin/qmake</value>
    <value key="abstractProcess.enabled" type="bool">false</value>
-   <value key="abstractProcess.workingDirectory" type="QString">/home/svilen/workQte/cloudGrain</value>
+   <value key="abstractProcess.workingDirectory" type="QString">/home/svilen/workQte/cloudGrain/qserialdevice/src</value>
   </valuemap>
  </data>
  <data>
@@ -231,7 +227,7 @@
    </valuelist>
    <value key="abstractProcess.command" type="QString">/usr/bin/make</value>
    <value key="abstractProcess.enabled" type="bool">true</value>
-   <value key="abstractProcess.workingDirectory" type="QString">/home/svilen/workQte/cloudGrain</value>
+   <value key="abstractProcess.workingDirectory" type="QString">/home/svilen/workQte/cloudGrain/qserialdevice/src</value>
   </valuemap>
  </data>
  <data>
@@ -312,7 +308,7 @@
    </valuelist>
    <value key="abstractProcess.command" type="QString">/usr/bin/make</value>
    <value key="abstractProcess.enabled" type="bool">true</value>
-   <value key="abstractProcess.workingDirectory" type="QString">/home/svilen/workQte/cloudGrain</value>
+   <value key="abstractProcess.workingDirectory" type="QString">/home/svilen/workQte/cloudGrain/qserialdevice/src</value>
    <value key="cleanConfig" type="bool">true</value>
    <valuelist key="makeargs" type="QVariantList">
     <value type="QString">clean</value>

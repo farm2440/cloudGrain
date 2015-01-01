@@ -138,3 +138,22 @@ git push -u origin master
 //    if((n%5)==0)   manager->get(QNetworkRequest(QUrl("http://qt-project.org")));
 //        if((n%5)==0)   manager->get(QNetworkRequest(QUrl("http://www.etherino.net/index.html")));
   */
+----------------------------------------------------------------------------------------
+QSerialDevice
+
+QSerialDevice e проекто който след компилиране генерира библиотека и моя проект се свързва към нея.
+
+1. От разархивира се  QSerialDevice_v0.1.0 и от него се взема папката и се копира в текущия проект като поддиректория
+
+2.Отваря се проекта qserialdevice/src/src.pro и се компилира
+
+3. В моя .pro файл се добавя:
+DEPENDPATH      += .
+INCLUDEPATH     += ./qserialdevice/src
+QMAKE_LIBDIR    += ./qserialdevice/src/release
+LIBS            += -lqserialdevice
+
+4. За да се ползва класа трябва да е добавено
+#include <abstractserial.h>
+
+5. За да се настрои скоростта трябва да се зададе след това и брой битове и четност иначе не се активира зададената скорост

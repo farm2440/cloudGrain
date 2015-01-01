@@ -9,11 +9,15 @@ CONFIG += console
 CONFIG -= app_bundle
 TEMPLATE = app
 SOURCES += main.cpp \
-    worker.cpp \
-    serialport.cpp
+    worker.cpp
 OTHER_FILES += README.txt \
     settings.xml \
     www/sensors.php
 HEADERS += definitions.h \
-    worker.h \
-    serialport.h
+    worker.h
+
+# За QSerialDevice
+DEPENDPATH += .
+INCLUDEPATH += ./qserialdevice/src
+QMAKE_LIBDIR += ./qserialdevice/src/release
+LIBS += -lqserialdevice

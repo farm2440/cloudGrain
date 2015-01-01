@@ -19,12 +19,11 @@
 #include <QNetworkReply>
 #include <QUrl>
 
-#include <iostream>
+//#include <iostream>
 #include <fstream>
 #include <unistd.h> //usleep()
 
-#include "serialport.h"
-#include "iniparser.h"
+#include <abstractserial.h>
 
 struct Settings
 {
@@ -65,9 +64,11 @@ public:
 
     //За POST изпращане на данни към облака
     QNetworkAccessManager *manager;
+    QNetworkRequest request;
     QString dataHeader;
+    QByteArray postData;
 
-    SerialPort sp; //През този порт става връзката по RS-485 към контролерите
+    AbstractSerial *spCon1;
     char rxbuf[200];
 
     QDomDocument xmlDoc; //файлът settings.xml се зарежда в този обект и садържа индивидуалните потребителски настройки
@@ -77,7 +78,8 @@ public:
     QList<int> listLevels;// Списък с нивата на сензорите прочетени от settings.xml
                           //най-долния сензор е ниво 0 и растат нагоре
     QString timestamp; // Дата/час на последното прочитане на сензорите
-
+    QFile ramFile;
+    QTime time;
 
 signals:
 
@@ -90,7 +92,7 @@ public slots:
     void replyFinished(QNetworkReply* reply);
 
     bool exportRamFile(); //записва актуални данни в /mnt/ramdisk/sensors
-    QString getSensorValue(int rope, int level); //Връща стойността за сензор от listSensors
+    QString getSensorValue(int rope, int level); //Връща стойността за сензор от listSensors    
 };
 
 #endif // WORKER_H

@@ -6,11 +6,14 @@ Worker::Worker(QObject *parent) :  QObject(parent)
     tmr.setSingleShot(true);
     n=1;
 
+    ramFile.setFileName("/mnt/ramdisk/sensors");
+    spCon1 =  new AbstractSerial();
+
     //Зареждата се настройките от settings.xml
     QFile xmlFile("settings.xml");
     if(! xmlFile.open(QIODevice::ReadOnly))
     {
-        std::cerr << "ERROR: Unable to open settings.xml" << std::endl;
+        qDebug() << "ERROR: Unable to open settings.xml";
         //TODO: Трябва да има healthservice за всички клиенти където да се пращат съобщения
         //за грешки общо от всички клиенти които ние да можем да следим.
     }
@@ -24,7 +27,7 @@ Worker::Worker(QObject *parent) :  QObject(parent)
 
         qDebug() << "parsing xml file...";
         qDebug() << "rootName=" << rootName;
-        if(rootName!="cloudGrain") std::cout << "ERROR: Error parsing XML. Root element must be cloudGrain." << std::endl;
+        if(rootName!="cloudGrain") qDebug() << "ERROR: Error parsing XML. Root element must be cloudGrain.";
 
         QDomNodeList childNodesList = root.childNodes();
         for(int i=0 ; i<childNodesList.count() ; i++)
@@ -118,32 +121,44 @@ Worker::Worker(QObject *parent) :  QObject(parent)
 
     //Отваряне на сериен порт
     uart1_dirRx();
-    std::cout << "Opening serial port...";
-    int h = sp.sp_open(settings.serialPort.toLatin1());
-    if(h==-1) std::cout << " failed" << std::endl;
-    else std::cout << " ok" << std::endl;
-    h = sp.sp_setPort(B1200,8,SerialPort::PARITY_NONE,1);
-    sp.sp_stopRxTimer();
+    qDebug() << "Opening serial port...";
+    spCon1->setDeviceName(settings.serialPort);
+    if (spCon1->open(QIODevice::ReadWrite | QIODevice::Unbuffered))
+    {
+            qDebug() << "Serial device " << spCon1->deviceName() << " open in " << spCon1->openMode();
+            spCon1->setBaudRate(AbstractSerial::BaudRate1200);
+            spCon1->setDataBits(AbstractSerial::DataBits8);
+            spCon1->setParity(AbstractSerial::ParityNone);
+    }
+    else qDebug() << "ERROR: Failed to open UART for connetion to ThermoLog controller!";
 
     manager = new QNetworkAccessManager(this);
     connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinished(QNetworkReply*)));
+    request.setUrl(settings.postURL);
 
     dataHeader="<string xmlns=\"http://schemas.microsoft.com/2003/10/Serialization/\">";
     dataHeader += (settings.email + ";");
 
-    tmr.start(5000);
+    tmr.start(10000);
 }
+
+/*
+Worker::~Worker()
+{
+    spCon1->close();
+    delete spCon1;
+}
+*/
 
 void Worker::tick(void)
 {
-    QTime time;
-    QString rxdata;    
-    QNetworkRequest request(settings.postURL);
-    QByteArray postData;
 
-    std::cout << std::endl << "tick " << n++ << std::endl;
+    QString rxdata;
+    QByteArray rxBytes;
+
+    qDebug() << "\r\ntick " << n++;
     //Serial Port
-    if(!sp.sp_isOpen()) std::cout << "Serial is not open!" << std::endl;
+    if(!spCon1->isOpen()) qDebug() << "Serial " << spCon1->deviceName() << " is not open!";
 
     timestamp = QDate::currentDate().toString("yyyy-MM-dT");
     timestamp += QTime::currentTime().toString("hh:mm:ss.zzzZ;");
@@ -154,31 +169,34 @@ void Worker::tick(void)
         for(int bus=0 ; bus<3 ; bus++)
         {
             uart1_dirTx();
-            sp.sp_write(QString("tst %1 %2\r\n").arg(settings.controllers[i]).arg(bus), true);
+            spCon1->write(QString("tst %1 %2\r\n").arg(settings.controllers[i]).arg(bus).toLatin1());
+            spCon1->flush();
             uart1_dirRx();
             time.start();
-            sp.sp_clearRxBuffer();
+//            spCon1->readAll(); //clear buffer
             rxdata="";
             while(true)
             {
-                int r = sp.sp_read(rxbuf,199);
-                rxbuf[r]=0;
-                if(r>0)
-                {                    
-                    rxdata += QString(rxbuf);
-                    if(rxbuf[r-1]=='\n')
+                if(spCon1->bytesAvailable(false)>0)
+                {
+                    rxBytes.clear();
+                    rxBytes = spCon1->readAll();
+                    rxdata += QString(rxBytes);
+                    if(rxdata.contains("\r\n"))
                     {
-                        rxdata.remove('\r');
-                        rxdata.remove('\n');
+                        int p = rxdata.indexOf("\r\n");
+                        rxdata = rxdata.left(p);
                         qDebug() << "rx:" <<rxdata;
                         break;
                     }
                 }
+                else usleep(20000);
                 if(time.elapsed()>2000)
                 {
                     qDebug() << "timeout!";
                     break;
                 }
+
             }
             //В приетите данни по RS-485 се търсят стойности от сензорите
             for(int sensIdx=0 ; sensIdx<listSensors.count() ; sensIdx++)
@@ -206,6 +224,7 @@ void Worker::tick(void)
     strData += QString::number(25+n%5) + ";"; //стойност
     strData += timestamp;
     strData +="</string>";
+    postData.clear();
     postData=strData.toUtf8();
 
     request.setRawHeader("Content-Type","text/xml;charset=utf-8");
@@ -225,6 +244,7 @@ void Worker::tick(void)
         strData += timestamp;
 
         strData +="</string>";
+        postData.clear();
         postData=strData.toUtf8();
         request.setRawHeader("Content-Type","text/xml;charset=utf-8");
         if((n % settings.postPeriod)==0)
@@ -240,19 +260,19 @@ void Worker::tick(void)
 
 void Worker::replyFinished(QNetworkReply * reply)
 {
-    std::cout << std::endl <<"reply! " << std::endl;
+    qDebug() <<"\r\nreply! ";
 
     QList<QByteArray> hlist = reply->rawHeaderList();
-    std::cout << "headers num=" << hlist.count() << std::endl;
+    qDebug() << "headers num=" << hlist.count();
 
     QString name,data;
     foreach(QByteArray ba, hlist)
     {
         name = QString(ba);
-        std::cout << " HEADER: " << name.toStdString() << std::endl;
+        qDebug() << " HEADER: " << name;
 
         data = QString(reply->rawHeader(ba));
-        std::cout << " DATA: " << data.toStdString() << std::endl;
+        qDebug() << " DATA: " << data;
     }
 }
 
@@ -278,7 +298,7 @@ bool Worker::exportRamFile()
     /*в /mnt/ramdisk е монтирана от стартиращия скрипт RAM-базирана файлова система.
       Файлът /mnt/ramdisk/sensors съдържа данните за настройки и актуални стойности на сензорите
     */
-    QFile ramFile("/mnt/ramdisk/sensors");
+
     ramFile.open(QIODevice::WriteOnly);
 
     QString data= "Company: " + settings.customer + "<br>\r\n";
@@ -315,7 +335,7 @@ QString Worker::getSensorValue(int rope, int level)
     {
         if((s.rope.toInt()==rope) && (s.level.toInt()==level))
         {
-            qDebug() << "rope:" << rope << "  level:" <<level << "  value:" <<s.value;
+//            qDebug() << "rope:" << rope << "  level:" <<level << "  value:" <<s.value;
             return s.value;
         }
     }
