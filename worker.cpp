@@ -2,11 +2,6 @@
 
 Worker::Worker(QObject *parent) :  QObject(parent)
 {
-    connect(&tmr, SIGNAL(timeout()), this, SLOT(tick()));
-    tmr.setSingleShot(true);
-    n=1;
-
-    ramFile.setFileName("/mnt/ramdisk/sensors");
     spCon1 =  new AbstractSerial();
 
     //Зареждата се настройките от settings.xml
@@ -136,10 +131,8 @@ Worker::Worker(QObject *parent) :  QObject(parent)
     connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinished(QNetworkReply*)));
     request.setUrl(settings.postURL);
 
-    dataHeader="<string xmlns=\"http://schemas.microsoft.com/2003/10/Serialization/\">";
-    dataHeader += (settings.email + ";");
-
-    tmr.start(10000);
+    //Старта е отложен за да се даде време за DHCP и NTP
+    usleep(10*1000*1000);
 }
 
 /*
@@ -150,111 +143,120 @@ Worker::~Worker()
 }
 */
 
-void Worker::tick(void)
+void Worker::workLoop(void)
 {
-
     QString rxdata;
     QByteArray rxBytes;
+    int loopCounter = 1;
+    QString timestamp; // Дата/час на последното прочитане на сензорите
 
-    qDebug() << "\r\ntick " << n++;
-    //Serial Port
-    if(!spCon1->isOpen()) qDebug() << "Serial " << spCon1->deviceName() << " is not open!";
+    QByteArray postData;
+    QString dataHeader;
+    dataHeader="<string xmlns=\"http://schemas.microsoft.com/2003/10/Serialization/\">";
+    dataHeader += (settings.email + ";");
 
-    timestamp = QDate::currentDate().toString("yyyy-MM-dT");
-    timestamp += QTime::currentTime().toString("hh:mm:ss.zzzZ;");
 
-    //Прочитане на сензорите
-    for(int i=0 ; i<settings.controllers.count() ; i++)
+    while(1)
     {
-        for(int bus=0 ; bus<3 ; bus++)
+        qDebug() << "\r\ntick " << loopCounter++;
+        //Serial Port
+        if(!spCon1->isOpen()) qDebug() << "Serial " << spCon1->deviceName() << " is not open!";
+
+        timestamp = QDate::currentDate().toString("yyyy-MM-dT");
+        timestamp += QTime::currentTime().toString("hh:mm:ss.zzzZ;");
+
+        //Прочитане на сензорите
+        for(int i=0 ; i<settings.controllers.count() ; i++)
         {
-            uart1_dirTx();
-            spCon1->write(QString("tst %1 %2\r\n").arg(settings.controllers[i]).arg(bus).toLatin1());
-            spCon1->flush();
-            uart1_dirRx();
-            time.start();
-//            spCon1->readAll(); //clear buffer
-            rxdata="";
-            while(true)
+            for(int bus=0 ; bus<3 ; bus++)
             {
-                if(spCon1->bytesAvailable(false)>0)
+                uart1_dirTx();
+                spCon1->write(QString("tst %1 %2\r\n").arg(settings.controllers[i]).arg(bus).toLatin1());
+                spCon1->flush();
+                uart1_dirRx();
+                time.start();
+                rxdata="";
+                while(true)
                 {
-                    rxBytes.clear();
-                    rxBytes = spCon1->readAll();
-                    rxdata += QString(rxBytes);
-                    if(rxdata.contains("\r\n"))
+                    if(spCon1->bytesAvailable(false)>0)
                     {
-                        int p = rxdata.indexOf("\r\n");
-                        rxdata = rxdata.left(p);
-                        qDebug() << "rx:" <<rxdata;
+                        rxBytes.clear();
+                        rxBytes = spCon1->readAll();
+                        rxdata += QString(rxBytes);
+                        if(rxdata.contains("\r\n"))
+                        {
+                            int p = rxdata.indexOf("\r\n");
+                            rxdata = rxdata.left(p);
+                            qDebug() << "rx:" <<rxdata;
+                            break;
+                        }
+                    }
+                    else usleep(20000);
+                    if(time.elapsed()>2000)
+                    {
+                        qDebug() << "timeout!";
                         break;
                     }
+
                 }
-                else usleep(20000);
-                if(time.elapsed()>2000)
+                //В приетите данни по RS-485 се търсят стойности от сензорите
+                for(int sensIdx=0 ; sensIdx<listSensors.count() ; sensIdx++)
                 {
-                    qDebug() << "timeout!";
-                    break;
+                    if(rxdata.contains("[" + listSensors[sensIdx].mac + "]="))
+                    {
+                        int p=rxdata.indexOf("[" + listSensors[sensIdx].mac + "]=");
+                        listSensors[sensIdx].value = rxdata.mid(p+11,4);
+                        listSensors[sensIdx].value = listSensors[sensIdx].value.insert(2,'.');
+                        listSensors[sensIdx].timestamp=timestamp;
+                        qDebug() << "value for mac " << listSensors[sensIdx].mac << " is " <<listSensors[sensIdx].value;
+                    }
                 }
 
             }
-            //В приетите данни по RS-485 се търсят стойности от сензорите
-            for(int sensIdx=0 ; sensIdx<listSensors.count() ; sensIdx++)
-            {
-                if(rxdata.contains("[" + listSensors[sensIdx].mac + "]="))
-                {
-                    int p=rxdata.indexOf("[" + listSensors[sensIdx].mac + "]=");
-                    listSensors[sensIdx].value = rxdata.mid(p+11,4);
-                    listSensors[sensIdx].value = listSensors[sensIdx].value.insert(2,'.');
-                    listSensors[sensIdx].timestamp=timestamp;
-                    qDebug() << "value for mac " << listSensors[sensIdx].mac << " is " <<listSensors[sensIdx].value;
-                }
-            }
-
         }
-    }
 
-    exportRamFile();
+        exportRamFile(timestamp);
 
-//Подготовка на данните  за POST
-    QString strData = dataHeader;
-    //DUMMY SENSOR
-    strData +="10E36F67-570D-4B82-B4EB-B20831AAAD5B;"; //guid - dummy sensor
-    strData +="494F5931-0A06-45BC-84CB-8F6FD3D67FCD;"; //secret - dummy sensor
-    strData += QString::number(25+n%5) + ";"; //стойност
-    strData += timestamp;
-    strData +="</string>";
-    postData.clear();
-    postData=strData.toUtf8();
-
-    request.setRawHeader("Content-Type","text/xml;charset=utf-8");
-    if((n % settings.postPeriod)==0)
-    {
-        manager->post(request, postData);
-        qDebug() << "POST:" << strData;
-    }
-
-    //Истински сензори
-    foreach(Sensor sens, listSensors)
-    {
-        strData =  dataHeader;
-        strData += (sens.guid + ";");
-        strData += (sens.secret + ";");
-        strData += (sens.value + ";");
+    //Подготовка на данните  за POST
+        QString strData = dataHeader;
+        //DUMMY SENSOR
+        strData +="10E36F67-570D-4B82-B4EB-B20831AAAD5B;"; //guid - dummy sensor
+        strData +="494F5931-0A06-45BC-84CB-8F6FD3D67FCD;"; //secret - dummy sensor
+        strData += QString::number(25+loopCounter%5) + ";"; //стойност
         strData += timestamp;
-
         strData +="</string>";
         postData.clear();
         postData=strData.toUtf8();
+
         request.setRawHeader("Content-Type","text/xml;charset=utf-8");
-        if((n % settings.postPeriod)==0)
+        if((loopCounter % settings.postPeriod)==0)
         {
             manager->post(request, postData);
             qDebug() << "POST:" << strData;
         }
-    }
 
-    tmr.start(settings.readPeriod);
+        //Истински сензори
+        foreach(Sensor sens, listSensors)
+        {
+            strData =  dataHeader;
+            strData += (sens.guid + ";");
+            strData += (sens.secret + ";");
+            strData += (sens.value + ";");
+            strData += timestamp;
+
+            strData +="</string>";
+            postData.clear();
+            postData=strData.toUtf8();
+            request.setRawHeader("Content-Type","text/xml;charset=utf-8");
+            if((loopCounter % settings.postPeriod)==0)
+            {
+                manager->post(request, postData);
+                qDebug() << "POST:" << strData;
+            }
+        }
+
+        usleep(settings.readPeriod * 1000 * 1000);
+    }//while(1)
 }
 
 
@@ -274,6 +276,10 @@ void Worker::replyFinished(QNetworkReply * reply)
         data = QString(reply->rawHeader(ba));
         qDebug() << " DATA: " << data;
     }
+
+    hlist.clear();
+    //!!!!!!!!
+    reply->deleteLater();
 }
 
 void Worker::uart1_dirRx()
@@ -293,13 +299,13 @@ void Worker::uart1_dirTx()
     usleep(5000);
 }
 
-bool Worker::exportRamFile()
+bool Worker::exportRamFile(QString timestamp)
 {//връща true при успех иначе false
     /*в /mnt/ramdisk е монтирана от стартиращия скрипт RAM-базирана файлова система.
       Файлът /mnt/ramdisk/sensors съдържа данните за настройки и актуални стойности на сензорите
     */
 
-    ramFile.open(QIODevice::WriteOnly);
+    QFile ramFile("/mnt/ramdisk/sensors");
 
     QString data= "Company: " + settings.customer + "<br>\r\n";
     data += ("Silo: " + settings.siloName + "<br>\r\n");
@@ -324,6 +330,8 @@ bool Worker::exportRamFile()
         data += "</tr>\r\n";
     }
     data += "</table>";
+
+    ramFile.open(QIODevice::WriteOnly);
     ramFile.write(data.toLatin1());
     ramFile.close();
     return true;

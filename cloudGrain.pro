@@ -12,7 +12,8 @@ SOURCES += main.cpp \
     worker.cpp
 OTHER_FILES += README.txt \
     settings.xml \
-    www/sensors.php
+    www/sensors.php \
+    README.md
 HEADERS += definitions.h \
     worker.h
 

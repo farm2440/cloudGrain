@@ -59,15 +59,6 @@ public:
 
     explicit Worker(QObject *parent = 0);
 
-    QTimer tmr;
-    int n;
-
-    //За POST изпращане на данни към облака
-    QNetworkAccessManager *manager;
-    QNetworkRequest request;
-    QString dataHeader;
-    QByteArray postData;
-
     AbstractSerial *spCon1;
     char rxbuf[200];
 
@@ -77,9 +68,11 @@ public:
     QList<int> listRopes;// Списък с номерата на въжетата прочетени от settings.xml
     QList<int> listLevels;// Списък с нивата на сензорите прочетени от settings.xml
                           //най-долния сензор е ниво 0 и растат нагоре
-    QString timestamp; // Дата/час на последното прочитане на сензорите
-    QFile ramFile;
     QTime time;
+
+    //За POST изпращане на данни към облака
+    QNetworkAccessManager *manager;
+    QNetworkRequest request;
 
 signals:
 
@@ -88,10 +81,10 @@ public slots:
     void uart1_dirTx();
     void uart1_dirRx();
 
-    void tick(void);
+    void workLoop(void);
     void replyFinished(QNetworkReply* reply);
 
-    bool exportRamFile(); //записва актуални данни в /mnt/ramdisk/sensors
+    bool exportRamFile(QString timestamp); //записва актуални данни в /mnt/ramdisk/sensors
     QString getSensorValue(int rope, int level); //Връща стойността за сензор от listSensors    
 };
 
