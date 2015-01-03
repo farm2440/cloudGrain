@@ -70,6 +70,9 @@ public:
                           //най-долния сензор е ниво 0 и растат нагоре
     QTime time;
 
+    QTimer timer;
+    int loopCounter;
+
     //За POST изпращане на данни към облака
     QNetworkAccessManager *manager;
     QNetworkRequest request;
@@ -81,7 +84,7 @@ public slots:
     void uart1_dirTx();
     void uart1_dirRx();
 
-    void workLoop(void);
+    void timerTick(void);
     void replyFinished(QNetworkReply* reply);
 
     bool exportRamFile(QString timestamp); //записва актуални данни в /mnt/ramdisk/sensors

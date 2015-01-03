@@ -36,8 +36,8 @@ Worker::Worker(QObject *parent) :  QObject(parent)
             if(elm.tagName()=="id") settings.id=elm.text();
             if(elm.tagName()=="email") settings.email=elm.text();
 
-            if(elm.tagName()=="readPeriod") settings.readPeriod=elm.text().toInt()*1000;
-            if(settings.readPeriod<1000) settings.readPeriod = 1000;
+            if(elm.tagName()=="readPeriod") settings.readPeriod=elm.text().toInt();
+            if(settings.readPeriod<1) settings.readPeriod = 1;
 
             if(elm.tagName()=="postPeriod") settings.postPeriod=elm.text().toInt();
             if(settings.postPeriod<1) settings.postPeriod=1;
@@ -132,7 +132,10 @@ Worker::Worker(QObject *parent) :  QObject(parent)
     request.setUrl(settings.postURL);
 
     //Старта е отложен за да се даде време за DHCP и NTP
-    usleep(10*1000*1000);
+    loopCounter = 1;
+    connect(&timer, SIGNAL(timeout()), this, SLOT(timerTick()));
+    timer.setSingleShot(true);
+    timer.start(10*1000);
 }
 
 /*
@@ -143,11 +146,10 @@ Worker::~Worker()
 }
 */
 
-void Worker::workLoop(void)
+void Worker::timerTick(void)
 {
     QString rxdata;
-    QByteArray rxBytes;
-    int loopCounter = 1;
+    QByteArray rxBytes;    
     QString timestamp; // Дата/час на последното прочитане на сензорите
 
     QByteArray postData;
@@ -156,7 +158,7 @@ void Worker::workLoop(void)
     dataHeader += (settings.email + ";");
 
 
-    while(1)
+//    while(1)
     {
         qDebug() << "\r\ntick " << loopCounter++;
         //Serial Port
@@ -215,6 +217,7 @@ void Worker::workLoop(void)
             }
         }
 
+        qDebug() << "exportRamFile with timestamp:" << timestamp;
         exportRamFile(timestamp);
 
     //Подготовка на данните  за POST
@@ -254,9 +257,8 @@ void Worker::workLoop(void)
                 qDebug() << "POST:" << strData;
             }
         }
-
-        usleep(settings.readPeriod * 1000 * 1000);
     }//while(1)
+    timer.start(settings.readPeriod*1000);
 }
 
 

@@ -8,3 +8,6 @@
         в replyFinished(QNetworkReply * reply) е мое задължение да се изтрие обекта reply с deleteLater
         TODO: Да се тества!
   */
+
+03/01/2015
+  1.1.24 - Проблемът с memory leak отстранен. Върнат е таймера. Тествано.
