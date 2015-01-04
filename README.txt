@@ -70,9 +70,9 @@ echo "out" > /sys/class/gpio/gpio115/direction
 echo "out" > /sys/class/gpio/gpio49/direction
 mkdir /mnt/ramdisk
 mount -t tmpfs -o size=4m tmpfs /mnt/ramdisk
-touch /mnt/ramdisk/sensors
-echo "No data available or service is not running" > /mnt/ramdisk/sensors
-ln -s /mnt/ramdisk/sensors /www/pages/sensors.html
+touch /mnt/ramdisk/sensors.html
+echo "No data available or service is not running" > /mnt/ramdisk/sensors.html
+ln -s /mnt/ramdisk/sensors.html /www/pages/sensors.html
 
 Виж връзката как се осигурява изпълнение със стартирането:
 http://tenderlovemaking.com/2014/01/19/enabling-ttyo1-on-beaglebone.html

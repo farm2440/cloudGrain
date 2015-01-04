@@ -303,38 +303,43 @@ void Worker::uart1_dirTx()
 
 bool Worker::exportRamFile(QString timestamp)
 {//връща true при успех иначе false
-    /*в /mnt/ramdisk е монтирана от стартиращия скрипт RAM-базирана файлова система.
-      Файлът /mnt/ramdisk/sensors съдържа данните за настройки и актуални стойности на сензорите
+
+    /* Генерира се html таблица която съдържа актуални данни от сензорите.
+       След като е готово съдържанието на html-а  то се записва във файл във RAM паметта.
+       В /mnt/ramdisk е монтирана от стартиращия скрипт RAM-базирана файлова система.
+       Файлът /mnt/ramdisk/sensors.html съдържа данните за настройки и актуални стойности на сензорите
+       Този файл ще се импортира като фрейм в страницата livedata на уеб интерфейса
     */
 
-    QFile ramFile("/mnt/ramdisk/sensors");
 
-    QString data= "Company: " + settings.customer + "<br>\r\n";
-    data += ("Silo: " + settings.siloName + "<br>\r\n");
-    data += ("Location: " + settings.siloLocation + "<br><br>\r\n");
-    data += ("Timestamp: " + timestamp + "<br><br><hl><br>\r\n");
+    //Генериране на таблица с актуални стойности
+    QString table;
+    QString _timestamp = timestamp.left(timestamp.indexOf('T')) + "   " + timestamp.mid(timestamp.indexOf('T')+1, 8);
 
-    data +=  "<table  border=\"1\"> \r\n";
-    data += ("  <caption>Sensor values:</caption>\r\n");
+    table +=  "<table id=\"sensorsTable\"> \r\n";
+    table += ("  <caption>" + _timestamp + "</caption>\r\n");
 
     //първи ред в таблицата - хедъри
-    data += ("<tr><th>level/rope</th>");
-    for(int r=0 ; r<listRopes.count() ; r++) data+=("<th>" + QString::number(listRopes[r]) + "</th>");
-    data += "</tr>\r\n";
+    table += ("<tr><th>level/rope</th>");
+    for(int r=0 ; r<listRopes.count() ; r++) table+=("<th>" + QString::number(listRopes[r]) + "</th>");
+    table += "</tr>\r\n";
     //Останалите редове в таблицата - първа колона е номер на ниво останалите са температура на датчиците
     for(int l=0 ; l<listLevels.count() ; l++)
     {
-        data += ("<tr><th>" + QString::number(listLevels[l]) +"</th>");//Номер на ниво
+        table += ("<tr><th>" + QString::number(listLevels[l]) +"</th>");//Номер на ниво
         for(int r=0 ; r<listRopes.count() ; r++)
         {
-            data += ("<td>" + getSensorValue(listRopes[r],listLevels[l])+ "</td>");
+            table += ("<td>" + getSensorValue(listRopes[r],listLevels[l])+ "</td>");
         }
-        data += "</tr>\r\n";
+        table += "</tr>\r\n";
     }
-    data += "</table>";
+    table += "</table>";
 
+
+    //Готовия html се записва в RAM файла
+    QFile ramFile("/mnt/ramdisk/sensors.html");
     ramFile.open(QIODevice::WriteOnly);
-    ramFile.write(data.toLatin1());
+    ramFile.write(table.toLatin1());
     ramFile.close();
     return true;
 }
