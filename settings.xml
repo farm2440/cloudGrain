@@ -8,6 +8,9 @@
         <readPeriod>10</readPeriod>
         <postPeriod> 3</postPeriod>
 
+        <groupAddress>239.0.0.052</groupAddress>
+        <groupPort>9025</groupPort>
+
         <silo  name="Silo number 3" location="Grain Plant Suvorovo">
              <controller rs485="0" version="1">
                   <sensor>

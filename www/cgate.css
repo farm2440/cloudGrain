@@ -47,6 +47,7 @@ iframe {
 	padding-top: 5px;
 	padding-left: 24px;
 	padding-bottom: 5px;
+	color: white;
 }
 #nextNav
 {
@@ -73,10 +74,8 @@ iframe {
 #sensorsTable {
 	padding: 5px;
 	border: 1px solid black;
-   border-collapse: collapse;	
-   background-color: white;
-   color: black;
-s
+	color: white;
+	border-collapse: collapse;
 }
 
 th,td {

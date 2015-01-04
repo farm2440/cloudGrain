@@ -13,7 +13,8 @@ SOURCES += main.cpp \
 OTHER_FILES += README.txt \
     settings.xml \
     www/sensors.php \
-    README.md
+    README.md \
+    script/setEnv
 HEADERS += definitions.h \
     worker.h
 

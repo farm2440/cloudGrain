@@ -72,7 +72,8 @@ mkdir /mnt/ramdisk
 mount -t tmpfs -o size=4m tmpfs /mnt/ramdisk
 touch /mnt/ramdisk/sensors.html
 echo "No data available or service is not running" > /mnt/ramdisk/sensors.html
-ln -s /mnt/ramdisk/sensors.html /www/pages/sensors.html
+touch /mnt/ramdisk/settings.html
+echo "No settings data available or service is not running" > /mnt/ramdisk/settings.html
 
 Виж връзката как се осигурява изпълнение със стартирането:
 http://tenderlovemaking.com/2014/01/19/enabling-ttyo1-on-beaglebone.html

@@ -1,0 +1,13 @@
+#!/bin/bash
+echo BB-UART1 > /sys/devices/bone_capemgr.*/slots
+echo STIV-GPIO > /sys/devices/bone_capemgr.*/slots
+echo 49 > /sys/class/gpio/export
+echo 115 > /sys/class/gpio/export
+echo "out" > /sys/class/gpio/gpio115/direction
+echo "out" > /sys/class/gpio/gpio49/direction
+mkdir /mnt/ramdisk
+mount -t tmpfs -o size=4m tmpfs /mnt/ramdisk
+touch /mnt/ramdisk/sensors.html
+echo "No data available or service is not running" > /mnt/ramdisk/sensors.html
+touch /mnt/ramdisk/settings.html
+echo "No settings data available or service is not running" > /mnt/ramdisk/settings.html
