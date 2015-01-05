@@ -14,7 +14,9 @@
 #include <QFile>
 #include <QtXml>
 
-
+#include <QHostAddress>
+#include <QUdpSocket>
+#include <QAbstractSocket>
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QNetworkReply>
@@ -38,7 +40,11 @@ struct Settings
 
     QByteArray controllers; //съдържа RS-485 адресите на свързаните контролери
     int readPeriod; //секунди между две прочитания на контролера
-    int postPeriod; //през колко прочитания на контролера да се пращат данни в Интернет
+    int postPeriod; //през колко прочитания на контролера да се пращат данни в Интернет. Ако е 0 не се пращат данни
+    int mcastPeriod;//през колко прочитания на контролера да се праща мултикаст в локалната межа. Ако е 0 не се пращат данни
+
+    QHostAddress groupAddress;
+    int groupPort;
 };
 
 struct Sensor
@@ -48,6 +54,7 @@ struct Sensor
     QString level;
     QString guid;
     QString secret;
+    QString type;
 
     QString value;
     QString timestamp;
@@ -78,6 +85,7 @@ public:
     QNetworkAccessManager *manager;
     QNetworkRequest request;
 
+    QUdpSocket udpSocket;
 signals:
 
 public slots:

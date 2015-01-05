@@ -5,8 +5,9 @@
         <id>10E36F67-570D-4B82-B4EB-B20831AAAD5B</id>
         <email>s_stavrev@hotmail.com</email>
 
-        <readPeriod>10</readPeriod>
-        <postPeriod> 3</postPeriod>
+        <readPeriod>4</readPeriod>
+        <postPeriod>3</postPeriod>
+        <mcastPeriod>1</mcastPeriod>
 
         <groupAddress>239.0.0.052</groupAddress>
         <groupPort>9025</groupPort>
