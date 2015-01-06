@@ -83,7 +83,7 @@ Worker::Worker(QObject *parent) :  QObject(parent)
                             if(elmParam.tagName()=="level") level=elmParam.text();
                             if(elmParam.tagName()=="guid") guid=elmParam.text();
                             if(elmParam.tagName()=="secret") secret=elmParam.text();
-                        }                        
+                        }
                         qDebug() << "   mac:" << mac;
                         qDebug() << "   rope:" << rope;
                         qDebug() << "   level:" << level;
@@ -110,6 +110,9 @@ Worker::Worker(QObject *parent) :  QObject(parent)
 
     qDebug() << "readPeriod=" << settings.readPeriod;
     qDebug() << "postPeriod=" << settings.postPeriod;
+    qDebug() << "mcastPeriod=" << settings.mcastPeriod;
+    postCounter=settings.postPeriod;
+    mcastCounter=settings.mcastPeriod;
 
     //Сортират се номерата на нивата и въжетата. Ползват се при генериране на данните за RAM файла
 //    for(int i=0 ; i< listLevels.count() ; i++) qDebug() << "listLevels[" << i << "]=" << listLevels[i];
@@ -213,7 +216,7 @@ void Worker::timerTick(void)
                 if(rxdata.contains("[" + listSensors[sensIdx].mac + "]="))
                 {
                     int p=rxdata.indexOf("[" + listSensors[sensIdx].mac + "]=");
-                    listSensors[sensIdx].value = rxdata.mid(p+11,4);
+                    listSensors[sensIdx].value = rxdata.mid(p+3+listSensors[sensIdx].mac.length(),4);
                     listSensors[sensIdx].value = listSensors[sensIdx].value.insert(2,'.');
                     listSensors[sensIdx].timestamp=timestamp;
                     qDebug() << "value for mac " << listSensors[sensIdx].mac << " is " <<listSensors[sensIdx].value;
@@ -226,10 +229,14 @@ void Worker::timerTick(void)
     exportRamFile(timestamp);
 
     //Подготовка на данните  за POST
+    qDebug() << "postCounter=" <<postCounter << "   mcastCounter=" << mcastCounter;
     if(settings.postPeriod!=0)
     {
-        if((loopCounter % settings.postPeriod)==0)
+        postCounter--;
+        if(postCounter==0)
         {
+            qDebug() << "sending POST...";
+            postCounter=settings.postPeriod;
             QString strData = dataHeader;
             //DUMMY SENSOR
             strData +="10E36F67-570D-4B82-B4EB-B20831AAAD5B;"; //guid - dummy sensor
@@ -243,7 +250,7 @@ void Worker::timerTick(void)
             request.setRawHeader("Content-Type","text/xml;charset=utf-8");
 
             manager->post(request, postData);
-            qDebug() << "POST (dummy sensor):" << strData;
+            //qDebug() << "POST (dummy sensor):" << strData;
 
             //Истински сензори
             foreach(Sensor sens, listSensors)
@@ -259,7 +266,7 @@ void Worker::timerTick(void)
                 postData=strData.toUtf8();
                 request.setRawHeader("Content-Type","text/xml;charset=utf-8");
                 manager->post(request, postData);
-                qDebug() << "POST:" << strData;
+                //qDebug() << "POST:" << strData;
             }
         }
     }//if(settings.postPeriod!=0)
@@ -267,8 +274,11 @@ void Worker::timerTick(void)
     //multicast
     if(settings.mcastPeriod!=0)
     {
-        if((loopCounter % settings.mcastPeriod)==0)
+        mcastCounter--;
+        if(mcastCounter==0)
         {
+            qDebug() << "Sending multicast...";
+            mcastCounter=settings.mcastPeriod;
             foreach(Sensor sens, listSensors)
             {
                 strDatagram = "<sensor>\r\n";
@@ -292,15 +302,15 @@ void Worker::timerTick(void)
     timer.start(settings.readPeriod*1000);
 }
 
-
 void Worker::replyFinished(QNetworkReply * reply)
 {
-    qDebug() <<"\r\nreply! ";
-
+    qDebug() <<"post reply!";
+/*
     QList<QByteArray> hlist = reply->rawHeaderList();
     qDebug() << "headers num=" << hlist.count();
 
     QString name,data;
+
     foreach(QByteArray ba, hlist)
     {
         name = QString(ba);
@@ -309,8 +319,8 @@ void Worker::replyFinished(QNetworkReply * reply)
         data = QString(reply->rawHeader(ba));
         qDebug() << " DATA: " << data;
     }
-
     hlist.clear();
+*/
     //!!!!!!!!
     reply->deleteLater();
 }

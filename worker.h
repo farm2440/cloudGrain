@@ -79,7 +79,9 @@ public:
     QTime time;
 
     QTimer timer;
-    int loopCounter;
+    int loopCounter; //увеличава се с 1 при всеки цикъл на четене/пращане на данни
+    int postCounter, mcastCounter; // Намалят с 1 на всеки цикъл. Като станат 0 се пращат данни
+                                   // а стойността се възстановява
 
     //За POST изпращане на данни към облака
     QNetworkAccessManager *manager;

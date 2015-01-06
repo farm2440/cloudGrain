@@ -5,8 +5,8 @@
         <id>10E36F67-570D-4B82-B4EB-B20831AAAD5B</id>
         <email>s_stavrev@hotmail.com</email>
 
-        <readPeriod>4</readPeriod>
-        <postPeriod>3</postPeriod>
+        <readPeriod>10</readPeriod>
+        <postPeriod>6</postPeriod>
         <mcastPeriod>1</mcastPeriod>
 
         <groupAddress>239.0.0.052</groupAddress>
@@ -14,472 +14,260 @@
 
         <silo  name="Silo number 3" location="Grain Plant Suvorovo">
              <controller rs485="0" version="1">
+
+<!-- ROPE 1 -->
                   <sensor>
                       <rope>1</rope>
                       <level>1</level>
-                      <mac>4F51B805</mac>
+                      <mac>284F51B8050000AF</mac>
+                      <type>DS18B20</type>
                       <guid>EB9E5DB1-87D7-4302-A029-A9D75F166EB1</guid>
-                      <secret>35249FF2-9B48-40CE-AE79-85021FCBFD54</secret>
+                      <secret>35249FF2-9B48-40CE-AE79-85021FCBFD54</secret>                      
                   </sensor>
                   <sensor>
                       <rope>1</rope>
                       <level>2</level>
-                      <mac>C943B805</mac>
+                      <mac>28C943B805000008</mac>
+                      <type>DS18B20</type>
                       <guid>56EAFF01-6A7F-4A34-B72D-745F138E7DD9</guid>
                       <secret>5D31AB57-303C-4762-AEE3-3886F30371BB</secret>
                   </sensor>
                   <sensor>
                       <rope>1</rope>
                       <level>3</level>
-                      <mac>3E48B805</mac>
+                      <mac>283E48B80500008F</mac>
+                      <type>DS18B20</type>
                       <guid>49A0BAB4-C0A8-4E74-8D70-869FB2E00735</guid>
                       <secret>8AAC3C62-A288-4E82-B0F5-6206152682DF</secret>
                   </sensor>
-
-
-
-
                   <sensor>
                       <rope>1</rope>
                       <level>4</level>
-                      <mac>4F51B805</mac>
-                      <guid>EB9E5DB1-87D7-4302-A029-A9D75F166EB1</guid>
-                      <secret>35249FF2-9B48-40CE-AE79-85021FCBFD54</secret>
+                      <mac>108C1B8700080049</mac>
+                      <type>DS18S20</type>
+                      <guid>0553C954-34A8-4558-89AB-DD56A93E4759</guid>
+                      <secret>B812DC15-2489-41EE-ABAD-CBC5A9FC0582</secret>
                   </sensor>
                   <sensor>
                       <rope>1</rope>
                       <level>5</level>
-                      <mac>C943B805</mac>
-                      <guid>56EAFF01-6A7F-4A34-B72D-745F138E7DD9</guid>
-                      <secret>5D31AB57-303C-4762-AEE3-3886F30371BB</secret>
+                      <mac>1059B285020800EE</mac>
+                      <type>DS18S20</type>
+                      <guid>33716DC0-D013-4910-9D4C-263B131CC35E</guid>
+                      <secret>DAB25CFC-F0BA-40E8-9AF4-8624241C31BC</secret>
                   </sensor>
                   <sensor>
                       <rope>1</rope>
                       <level>6</level>
-                      <mac>3E48B805</mac>
-                      <guid>49A0BAB4-C0A8-4E74-8D70-869FB2E00735</guid>
-                      <secret>8AAC3C62-A288-4E82-B0F5-6206152682DF</secret>
+                      <mac>10D1B08502080026</mac>
+                      <type>DS18S20</type>
+                      <guid>73FCF954-C647-4C2D-AA01-8784EF37E6B6</guid>
+                      <secret>A40875EE-2477-44A7-BFC2-947042E8AB76</secret>
                   </sensor>
-                    <sensor>
-                        <rope>1</rope>
-                        <level>7</level>
-                        <mac>4F51B805</mac>
-                        <guid>EB9E5DB1-87D7-4302-A029-A9D75F166EB1</guid>
-                        <secret>35249FF2-9B48-40CE-AE79-85021FCBFD54</secret>
-                    </sensor>
-                    <sensor>
-                        <rope>1</rope>
-                        <level>8</level>
-                        <mac>C943B805</mac>
-                        <guid>56EAFF01-6A7F-4A34-B72D-745F138E7DD9</guid>
-                        <secret>5D31AB57-303C-4762-AEE3-3886F30371BB</secret>
-                    </sensor>
-                    <sensor>
-                        <rope>1</rope>
-                        <level>9</level>
-                        <mac>3E48B805</mac>
-                        <guid>49A0BAB4-C0A8-4E74-8D70-869FB2E00735</guid>
-                        <secret>8AAC3C62-A288-4E82-B0F5-6206152682DF</secret>
-                    </sensor>
-
-
+<!-- ROPE 2 -->
                   <sensor>
                       <rope>2</rope>
                       <level>1</level>
-                      <mac>4F51B805</mac>
+                      <mac>284F51B8050000AF</mac>
+                      <type>DS18B20</type>
                       <guid>EB9E5DB1-87D7-4302-A029-A9D75F166EB1</guid>
                       <secret>35249FF2-9B48-40CE-AE79-85021FCBFD54</secret>
                   </sensor>
                   <sensor>
                       <rope>2</rope>
                       <level>2</level>
-                      <mac>C943B805</mac>
+                      <mac>28C943B805000008</mac>
+                      <type>DS18B20</type>
                       <guid>56EAFF01-6A7F-4A34-B72D-745F138E7DD9</guid>
                       <secret>5D31AB57-303C-4762-AEE3-3886F30371BB</secret>
                   </sensor>
                   <sensor>
                       <rope>2</rope>
                       <level>3</level>
-                      <mac>3E48B805</mac>
+                      <mac>283E48B80500008F</mac>
+                      <type>DS18B20</type>
                       <guid>49A0BAB4-C0A8-4E74-8D70-869FB2E00735</guid>
                       <secret>8AAC3C62-A288-4E82-B0F5-6206152682DF</secret>
                   </sensor>
                   <sensor>
                       <rope>2</rope>
                       <level>4</level>
-                      <mac>4F51B805</mac>
-                      <guid>EB9E5DB1-87D7-4302-A029-A9D75F166EB1</guid>
-                      <secret>35249FF2-9B48-40CE-AE79-85021FCBFD54</secret>
+                      <mac>108C1B8700080049</mac>
+                      <type>DS18S20</type>
+                      <guid>0553C954-34A8-4558-89AB-DD56A93E4759</guid>
+                      <secret>B812DC15-2489-41EE-ABAD-CBC5A9FC0582</secret>
                   </sensor>
                   <sensor>
                       <rope>2</rope>
                       <level>5</level>
-                      <mac>C943B805</mac>
-                      <guid>56EAFF01-6A7F-4A34-B72D-745F138E7DD9</guid>
-                      <secret>5D31AB57-303C-4762-AEE3-3886F30371BB</secret>
+                      <mac>1059B285020800EE</mac>
+                      <type>DS18S20</type>
+                      <guid>33716DC0-D013-4910-9D4C-263B131CC35E</guid>
+                      <secret>DAB25CFC-F0BA-40E8-9AF4-8624241C31BC</secret>
                   </sensor>
                   <sensor>
                       <rope>2</rope>
                       <level>6</level>
-                      <mac>3E48B805</mac>
-                      <guid>49A0BAB4-C0A8-4E74-8D70-869FB2E00735</guid>
-                      <secret>8AAC3C62-A288-4E82-B0F5-6206152682DF</secret>
+                      <mac>10D1B08502080026</mac>
+                      <type>DS18S20</type>
+                      <guid>73FCF954-C647-4C2D-AA01-8784EF37E6B6</guid>
+                      <secret>A40875EE-2477-44A7-BFC2-947042E8AB76</secret>
                   </sensor>
-                    <sensor>
-                        <rope>2</rope>
-                        <level>7</level>
-                        <mac>4F51B805</mac>
-                        <guid>EB9E5DB1-87D7-4302-A029-A9D75F166EB1</guid>
-                        <secret>35249FF2-9B48-40CE-AE79-85021FCBFD54</secret>
-                    </sensor>
-                    <sensor>
-                        <rope>2</rope>
-                        <level>8</level>
-                        <mac>C943B805</mac>
-                        <guid>56EAFF01-6A7F-4A34-B72D-745F138E7DD9</guid>
-                        <secret>5D31AB57-303C-4762-AEE3-3886F30371BB</secret>
-                    </sensor>
-                    <sensor>
-                        <rope>2</rope>
-                        <level>9</level>
-                        <mac>3E48B805</mac>
-                        <guid>49A0BAB4-C0A8-4E74-8D70-869FB2E00735</guid>
-                        <secret>8AAC3C62-A288-4E82-B0F5-6206152682DF</secret>
-                    </sensor>
-
-
+<!-- ROPE 3 -->
                   <sensor>
                       <rope>3</rope>
                       <level>1</level>
-                      <mac>4F51B805</mac>
+                      <mac>284F51B8050000AF</mac>
+                      <type>DS18B20</type>
                       <guid>EB9E5DB1-87D7-4302-A029-A9D75F166EB1</guid>
                       <secret>35249FF2-9B48-40CE-AE79-85021FCBFD54</secret>
                   </sensor>
                   <sensor>
                       <rope>3</rope>
                       <level>2</level>
-                      <mac>C943B805</mac>
+                      <mac>28C943B805000008</mac>
+                      <type>DS18B20</type>
                       <guid>56EAFF01-6A7F-4A34-B72D-745F138E7DD9</guid>
                       <secret>5D31AB57-303C-4762-AEE3-3886F30371BB</secret>
                   </sensor>
                   <sensor>
                       <rope>3</rope>
                       <level>3</level>
-                      <mac>3E48B805</mac>
+                      <mac>283E48B80500008F</mac>
+                      <type>DS18B20</type>
                       <guid>49A0BAB4-C0A8-4E74-8D70-869FB2E00735</guid>
                       <secret>8AAC3C62-A288-4E82-B0F5-6206152682DF</secret>
                   </sensor>
                   <sensor>
                       <rope>3</rope>
                       <level>4</level>
-                      <mac>4F51B805</mac>
-                      <guid>EB9E5DB1-87D7-4302-A029-A9D75F166EB1</guid>
-                      <secret>35249FF2-9B48-40CE-AE79-85021FCBFD54</secret>
+                      <mac>108C1B8700080049</mac>
+                      <type>DS18S20</type>
+                      <guid>0553C954-34A8-4558-89AB-DD56A93E4759</guid>
+                      <secret>B812DC15-2489-41EE-ABAD-CBC5A9FC0582</secret>
                   </sensor>
                   <sensor>
                       <rope>3</rope>
                       <level>5</level>
-                      <mac>C943B805</mac>
-                      <guid>56EAFF01-6A7F-4A34-B72D-745F138E7DD9</guid>
-                      <secret>5D31AB57-303C-4762-AEE3-3886F30371BB</secret>
+                      <mac>1059B285020800EE</mac>
+                      <type>DS18S20</type>
+                      <guid>33716DC0-D013-4910-9D4C-263B131CC35E</guid>
+                      <secret>DAB25CFC-F0BA-40E8-9AF4-8624241C31BC</secret>
                   </sensor>
                   <sensor>
                       <rope>3</rope>
                       <level>6</level>
-                      <mac>3E48B805</mac>
+                      <mac>10D1B08502080026</mac>
+                      <type>DS18S20</type>
                       <guid>49A0BAB4-C0A8-4E74-8D70-869FB2E00735</guid>
                       <secret>8AAC3C62-A288-4E82-B0F5-6206152682DF</secret>
                   </sensor>
-                    <sensor>
-                        <rope>3</rope>
-                        <level>7</level>
-                        <mac>4F51B805</mac>
-                        <guid>EB9E5DB1-87D7-4302-A029-A9D75F166EB1</guid>
-                        <secret>35249FF2-9B48-40CE-AE79-85021FCBFD54</secret>
-                    </sensor>
-                    <sensor>
-                        <rope>3</rope>
-                        <level>8</level>
-                        <mac>C943B805</mac>
-                        <guid>56EAFF01-6A7F-4A34-B72D-745F138E7DD9</guid>
-                        <secret>5D31AB57-303C-4762-AEE3-3886F30371BB</secret>
-                    </sensor>
-                    <sensor>
-                        <rope>3</rope>
-                        <level>9</level>
-                        <mac>3E48B805</mac>
-                        <guid>49A0BAB4-C0A8-4E74-8D70-869FB2E00735</guid>
-                        <secret>8AAC3C62-A288-4E82-B0F5-6206152682DF</secret>
-                    </sensor>
-
+                  <sensor>
+                      <rope>3</rope>
+                      <level>7</level>
+                      <mac>10D1B08502080026</mac>
+                      <type>DS18S20</type>
+                      <guid>73FCF954-C647-4C2D-AA01-8784EF37E6B6</guid>
+                      <secret>A40875EE-2477-44A7-BFC2-947042E8AB76</secret>
+                  </sensor>
+<!-- ROPE 4 -->
                   <sensor>
                       <rope>4</rope>
                       <level>1</level>
-                      <mac>4F51B805</mac>
+                      <mac>284F51B8050000AF</mac>
+                      <type>DS18B20</type>
                       <guid>EB9E5DB1-87D7-4302-A029-A9D75F166EB1</guid>
                       <secret>35249FF2-9B48-40CE-AE79-85021FCBFD54</secret>
                   </sensor>
                   <sensor>
                       <rope>4</rope>
                       <level>2</level>
-                      <mac>C943B805</mac>
+                      <mac>28C943B805000008</mac>
+                      <type>DS18B20</type>
                       <guid>56EAFF01-6A7F-4A34-B72D-745F138E7DD9</guid>
                       <secret>5D31AB57-303C-4762-AEE3-3886F30371BB</secret>
                   </sensor>
                   <sensor>
                       <rope>4</rope>
                       <level>3</level>
-                      <mac>3E48B805</mac>
+                      <mac>283E48B80500008F</mac>
+                      <type>DS18B20</type>
                       <guid>49A0BAB4-C0A8-4E74-8D70-869FB2E00735</guid>
                       <secret>8AAC3C62-A288-4E82-B0F5-6206152682DF</secret>
                   </sensor>
                   <sensor>
                       <rope>4</rope>
                       <level>4</level>
-                      <mac>4F51B805</mac>
-                      <guid>EB9E5DB1-87D7-4302-A029-A9D75F166EB1</guid>
-                      <secret>35249FF2-9B48-40CE-AE79-85021FCBFD54</secret>
+                      <mac>108C1B8700080049</mac>
+                      <type>DS18S20</type>
+                      <guid>0553C954-34A8-4558-89AB-DD56A93E4759</guid>
+                      <secret>B812DC15-2489-41EE-ABAD-CBC5A9FC0582</secret>
                   </sensor>
                   <sensor>
                       <rope>4</rope>
                       <level>5</level>
-                      <mac>C943B805</mac>
-                      <guid>56EAFF01-6A7F-4A34-B72D-745F138E7DD9</guid>
-                      <secret>5D31AB57-303C-4762-AEE3-3886F30371BB</secret>
+                      <mac>1059B285020800EE</mac>
+                      <type>DS18S20</type>
+                      <guid>33716DC0-D013-4910-9D4C-263B131CC35E</guid>
+                      <secret>DAB25CFC-F0BA-40E8-9AF4-8624241C31BC</secret>
                   </sensor>
                   <sensor>
                       <rope>4</rope>
                       <level>6</level>
-                      <mac>3E48B805</mac>
-                      <guid>49A0BAB4-C0A8-4E74-8D70-869FB2E00735</guid>
-                      <secret>8AAC3C62-A288-4E82-B0F5-6206152682DF</secret>
+                      <mac>10D1B08502080026</mac>
+                      <type>DS18S20</type>
+                      <guid>73FCF954-C647-4C2D-AA01-8784EF37E6B6</guid>
+                      <secret>A40875EE-2477-44A7-BFC2-947042E8AB76</secret>
                   </sensor>
-                    <sensor>
-                        <rope>4</rope>
-                        <level>7</level>
-                        <mac>4F51B805</mac>
-                        <guid>EB9E5DB1-87D7-4302-A029-A9D75F166EB1</guid>
-                        <secret>35249FF2-9B48-40CE-AE79-85021FCBFD54</secret>
-                    </sensor>
-                    <sensor>
-                        <rope>4</rope>
-                        <level>8</level>
-                        <mac>C943B805</mac>
-                        <guid>56EAFF01-6A7F-4A34-B72D-745F138E7DD9</guid>
-                        <secret>5D31AB57-303C-4762-AEE3-3886F30371BB</secret>
-                    </sensor>
-                    <sensor>
-                        <rope>4</rope>
-                        <level>9</level>
-                        <mac>3E48B805</mac>
-                        <guid>49A0BAB4-C0A8-4E74-8D70-869FB2E00735</guid>
-                        <secret>8AAC3C62-A288-4E82-B0F5-6206152682DF</secret>
-                    </sensor>
-                      <sensor>
-                          <rope>4</rope>
-                          <level>10</level>
-                          <mac>3E48B805</mac>
-                          <guid>49A0BAB4-C0A8-4E74-8D70-869FB2E00735</guid>
-                          <secret>8AAC3C62-A288-4E82-B0F5-6206152682DF</secret>
-                      </sensor>
-
-
-
+<!-- ROPE 5 -->
                   <sensor>
                       <rope>5</rope>
                       <level>1</level>
-                      <mac>4F51B805</mac>
+                      <mac>284F51B8050000AF</mac>
+                      <type>DS18B20</type>
                       <guid>EB9E5DB1-87D7-4302-A029-A9D75F166EB1</guid>
                       <secret>35249FF2-9B48-40CE-AE79-85021FCBFD54</secret>
                   </sensor>
                   <sensor>
                       <rope>5</rope>
                       <level>2</level>
-                      <mac>C943B805</mac>
+                      <mac>28C943B805000008</mac>
+                      <type>DS18B20</type>
                       <guid>56EAFF01-6A7F-4A34-B72D-745F138E7DD9</guid>
                       <secret>5D31AB57-303C-4762-AEE3-3886F30371BB</secret>
                   </sensor>
                   <sensor>
                       <rope>5</rope>
                       <level>3</level>
-                      <mac>3E48B805</mac>
+                      <mac>283E48B80500008F</mac>
+                      <type>DS18B20</type>
                       <guid>49A0BAB4-C0A8-4E74-8D70-869FB2E00735</guid>
                       <secret>8AAC3C62-A288-4E82-B0F5-6206152682DF</secret>
                   </sensor>
                   <sensor>
                       <rope>5</rope>
                       <level>4</level>
-                      <mac>4F51B805</mac>
-                      <guid>EB9E5DB1-87D7-4302-A029-A9D75F166EB1</guid>
-                      <secret>35249FF2-9B48-40CE-AE79-85021FCBFD54</secret>
+                      <mac>108C1B8700080049</mac>
+                      <type>DS18S20</type>
+                      <guid>0553C954-34A8-4558-89AB-DD56A93E4759</guid>
+                      <secret>B812DC15-2489-41EE-ABAD-CBC5A9FC0582</secret>
                   </sensor>
                   <sensor>
                       <rope>5</rope>
                       <level>5</level>
-                      <mac>C943B805</mac>
-                      <guid>56EAFF01-6A7F-4A34-B72D-745F138E7DD9</guid>
-                      <secret>5D31AB57-303C-4762-AEE3-3886F30371BB</secret>
+                      <mac>1059B285020800EE</mac>
+                      <type>DS18S20</type>
+                      <guid>33716DC0-D013-4910-9D4C-263B131CC35E</guid>
+                      <secret>DAB25CFC-F0BA-40E8-9AF4-8624241C31BC</secret>
                   </sensor>
                   <sensor>
                       <rope>5</rope>
                       <level>6</level>
-                      <mac>3E48B805</mac>
-                      <guid>49A0BAB4-C0A8-4E74-8D70-869FB2E00735</guid>
-                      <secret>8AAC3C62-A288-4E82-B0F5-6206152682DF</secret>
+                      <mac>10D1B08502080026</mac>
+                      <type>DS18S20</type>
+                      <guid>73FCF954-C647-4C2D-AA01-8784EF37E6B6</guid>
+                      <secret>A40875EE-2477-44A7-BFC2-947042E8AB76</secret>
                   </sensor>
-                    <sensor>
-                        <rope>5</rope>
-                        <level>7</level>
-                        <mac>4F51B805</mac>
-                        <guid>EB9E5DB1-87D7-4302-A029-A9D75F166EB1</guid>
-                        <secret>35249FF2-9B48-40CE-AE79-85021FCBFD54</secret>
-                    </sensor>
-                    <sensor>
-                        <rope>5</rope>
-                        <level>8</level>
-                        <mac>C943B805</mac>
-                        <guid>56EAFF01-6A7F-4A34-B72D-745F138E7DD9</guid>
-                        <secret>5D31AB57-303C-4762-AEE3-3886F30371BB</secret>
-                    </sensor>
-                    <sensor>
-                        <rope>5</rope>
-                        <level>9</level>
-                        <mac>3E48B805</mac>
-                        <guid>49A0BAB4-C0A8-4E74-8D70-869FB2E00735</guid>
-                        <secret>8AAC3C62-A288-4E82-B0F5-6206152682DF</secret>
-                    </sensor>
-
-
-                  <sensor>
-                      <rope>6</rope>
-                      <level>1</level>
-                      <mac>4F51B805</mac>
-                      <guid>EB9E5DB1-87D7-4302-A029-A9D75F166EB1</guid>
-                      <secret>35249FF2-9B48-40CE-AE79-85021FCBFD54</secret>
-                  </sensor>
-                  <sensor>
-                      <rope>6</rope>
-                      <level>2</level>
-                      <mac>C943B805</mac>
-                      <guid>56EAFF01-6A7F-4A34-B72D-745F138E7DD9</guid>
-                      <secret>5D31AB57-303C-4762-AEE3-3886F30371BB</secret>
-                  </sensor>
-                  <sensor>
-                      <rope>6</rope>
-                      <level>3</level>
-                      <mac>3E48B805</mac>
-                      <guid>49A0BAB4-C0A8-4E74-8D70-869FB2E00735</guid>
-                      <secret>8AAC3C62-A288-4E82-B0F5-6206152682DF</secret>
-                  </sensor>
-                  <sensor>
-                      <rope>6</rope>
-                      <level>4</level>
-                      <mac>4F51B805</mac>
-                      <guid>EB9E5DB1-87D7-4302-A029-A9D75F166EB1</guid>
-                      <secret>35249FF2-9B48-40CE-AE79-85021FCBFD54</secret>
-                  </sensor>
-                  <sensor>
-                      <rope>6</rope>
-                      <level>5</level>
-                      <mac>C943B805</mac>
-                      <guid>56EAFF01-6A7F-4A34-B72D-745F138E7DD9</guid>
-                      <secret>5D31AB57-303C-4762-AEE3-3886F30371BB</secret>
-                  </sensor>
-                  <sensor>
-                      <rope>6</rope>
-                      <level>6</level>
-                      <mac>3E48B805</mac>
-                      <guid>49A0BAB4-C0A8-4E74-8D70-869FB2E00735</guid>
-                      <secret>8AAC3C62-A288-4E82-B0F5-6206152682DF</secret>
-                  </sensor>
-                    <sensor>
-                        <rope>6</rope>
-                        <level>7</level>
-                        <mac>4F51B805</mac>
-                        <guid>EB9E5DB1-87D7-4302-A029-A9D75F166EB1</guid>
-                        <secret>35249FF2-9B48-40CE-AE79-85021FCBFD54</secret>
-                    </sensor>
-                    <sensor>
-                        <rope>6</rope>
-                        <level>8</level>
-                        <mac>C943B805</mac>
-                        <guid>56EAFF01-6A7F-4A34-B72D-745F138E7DD9</guid>
-                        <secret>5D31AB57-303C-4762-AEE3-3886F30371BB</secret>
-                    </sensor>
-                    <sensor>
-                        <rope>6</rope>
-                        <level>9</level>
-                        <mac>3E48B805</mac>
-                        <guid>49A0BAB4-C0A8-4E74-8D70-869FB2E00735</guid>
-                        <secret>8AAC3C62-A288-4E82-B0F5-6206152682DF</secret>
-                    </sensor>
-
-
-                  <sensor>
-                      <rope>7</rope>
-                      <level>1</level>
-                      <mac>4F51B805</mac>
-                      <guid>EB9E5DB1-87D7-4302-A029-A9D75F166EB1</guid>
-                      <secret>35249FF2-9B48-40CE-AE79-85021FCBFD54</secret>
-                  </sensor>
-                  <sensor>
-                      <rope>7</rope>
-                      <level>2</level>
-                      <mac>C943B805</mac>
-                      <guid>56EAFF01-6A7F-4A34-B72D-745F138E7DD9</guid>
-                      <secret>5D31AB57-303C-4762-AEE3-3886F30371BB</secret>
-                  </sensor>
-                  <sensor>
-                      <rope>7</rope>
-                      <level>3</level>
-                      <mac>3E48B805</mac>
-                      <guid>49A0BAB4-C0A8-4E74-8D70-869FB2E00735</guid>
-                      <secret>8AAC3C62-A288-4E82-B0F5-6206152682DF</secret>
-                  </sensor>
-                  <sensor>
-                      <rope>7</rope>
-                      <level>4</level>
-                      <mac>4F51B805</mac>
-                      <guid>EB9E5DB1-87D7-4302-A029-A9D75F166EB1</guid>
-                      <secret>35249FF2-9B48-40CE-AE79-85021FCBFD54</secret>
-                  </sensor>
-                  <sensor>
-                      <rope>7</rope>
-                      <level>5</level>
-                      <mac>C943B805</mac>
-                      <guid>56EAFF01-6A7F-4A34-B72D-745F138E7DD9</guid>
-                      <secret>5D31AB57-303C-4762-AEE3-3886F30371BB</secret>
-                  </sensor>
-                  <sensor>
-                      <rope>7</rope>
-                      <level>6</level>
-                      <mac>3E48B805</mac>
-                      <guid>49A0BAB4-C0A8-4E74-8D70-869FB2E00735</guid>
-                      <secret>8AAC3C62-A288-4E82-B0F5-6206152682DF</secret>
-                  </sensor>
-                    <sensor>
-                        <rope>7</rope>
-                        <level>7</level>
-                        <mac>4F51B805</mac>
-                        <guid>EB9E5DB1-87D7-4302-A029-A9D75F166EB1</guid>
-                        <secret>35249FF2-9B48-40CE-AE79-85021FCBFD54</secret>
-                    </sensor>
-                    <sensor>
-                        <rope>7</rope>
-                        <level>8</level>
-                        <mac>C943B805</mac>
-                        <guid>56EAFF01-6A7F-4A34-B72D-745F138E7DD9</guid>
-                        <secret>5D31AB57-303C-4762-AEE3-3886F30371BB</secret>
-                    </sensor>
-                    <sensor>
-                        <rope>7</rope>
-                        <level>9</level>
-                        <mac>3E48B805</mac>
-                        <guid>49A0BAB4-C0A8-4E74-8D70-869FB2E00735</guid>
-                        <secret>8AAC3C62-A288-4E82-B0F5-6206152682DF</secret>
-                    </sensor>
-
-
 
              </controller>
 

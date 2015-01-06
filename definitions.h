@@ -3,7 +3,7 @@
 
 #define STR_VERSION     1
 #define STR_SUBVERSION  1
-#define STR_COMPILATION 27
+#define STR_COMPILATION 28
 
 
 
