@@ -4,7 +4,7 @@
 <title>ThermoLog cGate - Live data</title>
 <meta name="generator" content="Bluefish 2.2.5" >
 <meta name="author" content="Svilen" >
-<meta name="date" content="2015-01-07T12:17:32+0200" >
+<meta name="date" content="2015-01-07T17:18:26+0200" >
 <meta name="copyright" content="">
 <meta name="description" content="">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
@@ -39,8 +39,6 @@
 			echo $sensors;
   		?>
 	</div>
-
-	<div id="login"><a>Login</a> </div>
 
 	<div id="Nav">
 	     <div id="nextNav">

@@ -4,7 +4,7 @@
 <title>ThermoLog cGate - Live data</title>
 <meta name="generator" content="Bluefish 2.2.5" >
 <meta name="author" content="Svilen" >
-<meta name="date" content="2015-01-07T11:18:28+0200" >
+<meta name="date" content="2015-01-07T12:17:08+0200" >
 <meta name="copyright" content="">
 <meta name="description" content="">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
@@ -51,8 +51,8 @@
 	     		<a href="settings.php">Settings</a>	     		
 	     </div>
    </div>
-   <div id="liveDataSection"> 
-	    <div id="liveDataTableContainer">
+   <div id="DataSection"> 
+	    <div id="TableContainer">
 		    <?php
 				$sensors = file_get_contents('/mnt/ramdisk/livedatatable.html');
 				echo $sensors;

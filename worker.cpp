@@ -336,10 +336,44 @@ void Worker::uart1_dirRx()
     std::fstream fs;
     fs.open("/sys/class/gpio/gpio115/value", std::fstream::out);
     fs << "0";
-    fs.close();    
+    fs.close();
 }
 
 void Worker::uart1_dirTx()
+{
+    std::fstream fs;
+    fs.open("/sys/class/gpio/gpio115/value", std::fstream::out);
+    fs << "1";
+    fs.close();
+    usleep(5000);
+}
+
+void Worker::uart2_dirRx()
+{
+    std::fstream fs;
+    fs.open("/sys/class/gpio/gpio115/value", std::fstream::out);
+    fs << "0";
+    fs.close();
+}
+
+void Worker::uart2_dirTx()
+{
+    std::fstream fs;
+    fs.open("/sys/class/gpio/gpio115/value", std::fstream::out);
+    fs << "1";
+    fs.close();
+    usleep(5000);
+}
+
+void Worker::uart3_dirRx()
+{
+    std::fstream fs;
+    fs.open("/sys/class/gpio/gpio115/value", std::fstream::out);
+    fs << "0";
+    fs.close();
+}
+
+void Worker::uart3_dirTx()
 {
     std::fstream fs;
     fs.open("/sys/class/gpio/gpio115/value", std::fstream::out);

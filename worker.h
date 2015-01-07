@@ -99,6 +99,10 @@ public slots:
     //Функции за управление на GPIO пина за посока на SN75176
     void uart1_dirTx();
     void uart1_dirRx();
+    void uart2_dirTx();
+    void uart2_dirRx();
+    void uart3_dirTx();
+    void uart3_dirRx();
 
     void timerTick(void);
     void replyFinished(QNetworkReply* reply);

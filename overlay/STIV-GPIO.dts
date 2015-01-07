@@ -38,6 +38,9 @@
 				/*Added by Svilen Stavrev: BEGIN*/
 				0x1A4 0x07	/* P9_27 115 OUTPUT MODE7 - rs485 direction select for UART1 */
 				0x044 0x07	/* P9_23  49 OUTPUT MODE7 - rs485 direction select for UART2 */
+				0x078 0x07	/* P9_12  60 OUTPUT MODE7 - rs485 direction select for UART4 */
+
+				0x044 0x37	/* P9_15  48 INPUT MODE7pullup - allow settings.xml upload */
                      		/*Added by Svilen Stavrev: END*/
 
                                /* OUTPUT  GPIO(mode7) 0x07 pulldown, 0x17 pullup, 0x?f no pullup/down */

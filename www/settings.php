@@ -4,7 +4,7 @@
 <title>ThermoLog cGate - Live data</title>
 <meta name="generator" content="Bluefish 2.2.5" >
 <meta name="author" content="Svilen" >
-<meta name="date" content="2015-01-07T12:17:50+0200" >
+<meta name="date" content="2015-01-07T17:35:39+0200" >
 <meta name="copyright" content="">
 <meta name="description" content="">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
@@ -13,23 +13,13 @@
 <meta http-equiv="expires" content="0">
 <link href="cgate.css" rel="stylesheet" type="text/css">
 <style type="text/css">
-
 </style>
-<script type="text/javascript">
-<!--
-   function timedRefresh(timeoutPeriod) 
-   {
-          setTimeout("location.reload(true);",timeoutPeriod);
-   }
-// -->
-</script>
 </head>
 
 
-<body onload="JavaScript:timedRefresh(20000);">
-
+<body>
 	<div id="logo">
- 		<img src="logo.jpeg" width="213" height="120" alt="LOGO" longdesc="Etherino logo">
+ 		<img src="logo.jpeg"  width="213" height="120" alt="LOGO" longdesc="Etherino logo">
 	</div>
  	
 	<div id="header">	 
@@ -39,8 +29,6 @@
 			echo $sensors;
   		?>
 	</div>
-
-	<div id="login"><a>Login</a> </div>
 
 	<div id="Nav">
 	     <div id="nextNav">
@@ -58,6 +46,21 @@
 				echo $sensors;
   			?>
   	   </div>
+
+		<?php
+			$upload_enabled = file_get_contents('/sys/class/gpio/gpio48/value');
+			if($upload_enabled==0) 
+			{
+				echo '<form action="upload.php" method="post" enctype="multipart/form-data">';
+    			echo 'Select image to upload:';
+    			echo '<input type="file" name="fileToUpload" id="fileToUpload">';
+				echo '<input type="submit" value="Upload Image" name="submit">';
+				echo '</form>';
+			}
+			else echo 'Configuration upload is not enabled by hardware. Check the manual for options';
+		?>
+		
+  	   
 	</div>
 
 	<div id="footer">
