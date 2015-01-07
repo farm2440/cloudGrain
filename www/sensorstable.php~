@@ -4,7 +4,7 @@
 <title>ThermoLog cGate - Live data</title>
 <meta name="generator" content="Bluefish 2.2.5" >
 <meta name="author" content="Svilen" >
-<meta name="date" content="2015-01-04T21:44:57+0200" >
+<meta name="date" content="2015-01-07T11:22:59+0200" >
 <meta name="copyright" content="">
 <meta name="description" content="">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
@@ -34,7 +34,10 @@
  	
 	<div id="header">	 
 		<h1>ThermoLog cGate</h1>
-		firmware v.1.1.26 from 03/01/2015
+		<?php
+			$sensors = file_get_contents('/mnt/ramdisk/version.html');
+			echo $sensors;
+  		?>
 	</div>
 
 	<div id="login"><a>Login</a> </div>

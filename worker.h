@@ -1,6 +1,8 @@
 #ifndef WORKER_H
 #define WORKER_H
 
+#include "definitions.h"
+
 #include <QObject>
 
 #include <QTimer>
@@ -30,7 +32,10 @@
 
 struct Settings
 {
-    QString serialPort;
+    QString configName;
+    QString serialPort1;//RS-485 линия за контролери
+    QString serialPort2;//RS-485 линия за контролери
+    QString serialPort3;//RS-485 линия за MODBUS
     QString postURL;
     QString customer;
     QString id;
@@ -98,7 +103,11 @@ public slots:
     void timerTick(void);
     void replyFinished(QNetworkReply* reply);
 
-    bool exportRamFile(QString timestamp); //записва актуални данни в /mnt/ramdisk/sensors
+    bool exportRamFile_LiveDataTable(QString timestamp); //записва актуални данни в /mnt/ramdisk/livedata.html
+    bool exportRamFile_SensorsTable();
+    bool exportRamFile_Settings();
+    bool exportRamFile_Version();
+
     QString getSensorValue(int rope, int level); //Връща стойността за сензор от listSensors    
 };
 

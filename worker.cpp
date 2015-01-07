@@ -30,7 +30,8 @@ Worker::Worker(QObject *parent) :  QObject(parent)
             QDomNode node = childNodesList.at(i);
             QDomElement elm= node.toElement();            
             qDebug() << "node:" << elm.tagName() << ":" << elm.text();
-            if(elm.tagName()=="serialPort") settings.serialPort=elm.text();
+            if(elm.tagName()=="configName") settings.configName=elm.text();
+            if(elm.tagName()=="serialPort1") settings.serialPort1=elm.text();
             if(elm.tagName()=="postURL") settings.postURL=elm.text();
             if(elm.tagName()=="customer") settings.customer=elm.text();
             if(elm.tagName()=="id") settings.id=elm.text();
@@ -84,6 +85,7 @@ Worker::Worker(QObject *parent) :  QObject(parent)
                             if(elmParam.tagName()=="guid") guid=elmParam.text();
                             if(elmParam.tagName()=="secret") secret=elmParam.text();
                         }
+                        if(mac=="") continue;
                         qDebug() << "   mac:" << mac;
                         qDebug() << "   rope:" << rope;
                         qDebug() << "   level:" << level;
@@ -125,10 +127,14 @@ Worker::Worker(QObject *parent) :  QObject(parent)
     qDebug() << " ";
     //край зареждане на параметрите от settings.xml
 
+    exportRamFile_Version();
+    exportRamFile_Settings();
+    exportRamFile_SensorsTable();
+
     //Отваряне на сериен порт
     uart1_dirRx();
     qDebug() << "Opening serial port...";
-    spCon1->setDeviceName(settings.serialPort);
+    spCon1->setDeviceName(settings.serialPort1);
     if (spCon1->open(QIODevice::ReadWrite | QIODevice::Unbuffered))
     {
             qDebug() << "Serial device " << spCon1->deviceName() << " open in " << spCon1->openMode();
@@ -226,7 +232,7 @@ void Worker::timerTick(void)
     }
 
     qDebug() << "exportRamFile with timestamp:" << timestamp;
-    exportRamFile(timestamp);
+    exportRamFile_LiveDataTable(timestamp);
 
     //Подготовка на данните  за POST
     qDebug() << "postCounter=" <<postCounter << "   mcastCounter=" << mcastCounter;
@@ -342,7 +348,7 @@ void Worker::uart1_dirTx()
     usleep(5000);
 }
 
-bool Worker::exportRamFile(QString timestamp)
+bool Worker::exportRamFile_LiveDataTable(QString timestamp)
 {//връща true при успех иначе false
 
     /* Генерира се html таблица която съдържа актуални данни от сензорите.
@@ -357,7 +363,12 @@ bool Worker::exportRamFile(QString timestamp)
     QString table;
     QString _timestamp = timestamp.left(timestamp.indexOf('T')) + "   " + timestamp.mid(timestamp.indexOf('T')+1, 8);
 
-    table +=  "<table id=\"sensorsTable\"> \r\n";
+    table = "<div id=\"siloId\">\r\n";
+    table += ("      Silo: <b>" + settings.siloName + "</b><br>\r\n");
+    table += ("  Location: <b>" + settings.siloLocation + "</b><br>\r\n");
+    table += "</div>";
+
+    table +=  "<table> \r\n";
     table += ("  <caption>" + _timestamp + "</caption>\r\n");
 
     //първи ред в таблицата - хедъри
@@ -378,9 +389,72 @@ bool Worker::exportRamFile(QString timestamp)
 
 
     //Готовия html се записва в RAM файла
-    QFile ramFile("/mnt/ramdisk/sensors.html");
-    ramFile.open(QIODevice::WriteOnly);
+    QFile ramFile("/mnt/ramdisk/livedatatable.html");
+    if(!ramFile.open(QIODevice::WriteOnly))
+    {
+        qDebug() << "ERROR: failed opening file in RAM /mnt/ramdisk/livedatatable.html";
+        return false;
+    }
     ramFile.write(table.toLatin1());
+    ramFile.close();
+    return true;
+}
+
+bool Worker::exportRamFile_SensorsTable()
+{
+    return true;
+}
+
+bool Worker::exportRamFile_Settings()
+{
+    //Генериране на таблица с актуални стойности
+    QString table;
+
+    table +=  "<table> \r\n";
+    table += ("  <caption>Configuration name: " + settings.configName + "</caption>\r\n");
+
+    //първи ред в таблицата - хедъри
+    table += ("  <tr><th>Parameter</th><th>Value</th><tr>\r\n");
+    table += ("  <tr><td>Custormer</td><td>" + settings.customer + "</td></tr>\r\n");
+    table += ("  <tr><td>e-mail</td><td>" + settings.email + "</td></tr>\r\n");
+    table += ("  <tr><td>Controller line 1</td><td>" + settings.serialPort1 + "</td></tr>\r\n");
+    table += ("  <tr><td>Controller line 2</td><td>" + settings.serialPort2 + "</td></tr>\r\n");
+    table += ("  <tr><td>MODBUS line</td><td>" + settings.serialPort3 + "</td></tr>\r\n");
+    table += ("  <tr><td>POST Url</td><td>" + settings.postURL + "</td></tr>\r\n");
+    table += ("  <tr><td>Multicast address</td><td>" + settings.groupAddress.toString() + "</td></tr>\r\n");
+    table += ("  <tr><td>Multicast port</td><td>" + QString::number(settings.groupPort) + "</td></tr>\r\n");
+    table += ("  <tr><td>readPeriod</td><td>" + QString::number(settings.readPeriod) + "</td></tr>\r\n");
+    table += ("  <tr><td>postPeriod</td><td>" + QString::number(settings.postPeriod) + "</td></tr>\r\n");
+    table += ("  <tr><td>mcastPeriod</td><td>" + QString::number(settings.mcastPeriod) + "</td></tr>\r\n");
+    //table += ("  <tr><td> </td><td>" +  + "</td></tr>\r\n");
+    table += "</table>\r\n";
+
+
+    //Готовия html се записва в RAM файла
+    QFile ramFile("/mnt/ramdisk/settings.html");
+    if(!ramFile.open(QIODevice::WriteOnly))
+    {
+        qDebug() << "ERROR: failed opening file in RAM /mnt/ramdisk/settings.html";
+        return false;
+    }
+    ramFile.write(table.toLatin1());
+    ramFile.close();
+    return true;
+}
+
+bool Worker::exportRamFile_Version()
+{
+    QString version;
+    QFile ramFile("/mnt/ramdisk/version.html");
+
+    version = "firmware v." + QString::number(STR_VERSION) + '.' + QString::number(STR_SUBVERSION) + '.' + QString::number(STR_COMPILATION);
+
+    if(!ramFile.open(QIODevice::WriteOnly))
+    {
+        qDebug() << "ERROR: failed opening file in RAM /mnt/ramdisk/version.html";
+        return false;
+    }
+    ramFile.write(version.toLatin1());
     ramFile.close();
     return true;
 }
@@ -399,3 +473,4 @@ QString Worker::getSensorValue(int rope, int level)
 
     return "---";
 }
+

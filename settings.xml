@@ -1,5 +1,6 @@
 <cloudGrain>
-	<serialPort>/dev/ttyO1</serialPort>
+        <configName>Test</configName>
+        <serialPort1>/dev/ttyO1</serialPort1>
 	<postURL>http://devicewebvarnaservice.azurewebsites.net/RestService/SimpleWriteSingleValueDeviceData</postURL>	
 	<customer>ACME</customer>
         <id>10E36F67-570D-4B82-B4EB-B20831AAAD5B</id>
