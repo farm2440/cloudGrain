@@ -33,17 +33,15 @@
 struct Settings
 {
     QString configName;
-    QString serialPort1;//RS-485 линия за контролери
-    QString serialPort2;//RS-485 линия за контролери
-    QString serialPort3;//RS-485 линия за MODBUS
     QString postURL;
     QString customer;
-    QString id;
+    QString customerId;
     QString email;
     QString siloName;
-    QString siloLocation;
+    QString siloId;
+    QString locationName;
+    QString locationId;
 
-    QByteArray controllers; //съдържа RS-485 адресите на свързаните контролери
     int readPeriod; //секунди между две прочитания на контролера
     int postPeriod; //през колко прочитания на контролера да се пращат данни в Интернет. Ако е 0 не се пращат данни
     int mcastPeriod;//през колко прочитания на контролера да се праща мултикаст в локалната межа. Ако е 0 не се пращат данни
@@ -65,6 +63,13 @@ struct Sensor
     QString timestamp;
 };
 
+struct Controller
+{
+    QString version;
+    int address;
+    int line;
+};
+
 class Worker : public QObject
 {
 Q_OBJECT
@@ -72,12 +77,13 @@ public:
 
     explicit Worker(QObject *parent = 0);
 
-    AbstractSerial *spCon1;
+    AbstractSerial line1, line2, line3;
     char rxbuf[200];
 
     QDomDocument xmlDoc; //файлът settings.xml се зарежда в този обект и садържа индивидуалните потребителски настройки
     Settings settings;
     QList<Sensor> listSensors;
+    QList<Controller> listControllers;
     QList<int> listRopes;// Списък с номерата на въжетата прочетени от settings.xml
     QList<int> listLevels;// Списък с нивата на сензорите прочетени от settings.xml
                           //най-долния сензор е ниво 0 и растат нагоре
@@ -97,12 +103,8 @@ signals:
 
 public slots:
     //Функции за управление на GPIO пина за посока на SN75176
-    void uart1_dirTx();
-    void uart1_dirRx();
-    void uart2_dirTx();
-    void uart2_dirRx();
-    void uart3_dirTx();
-    void uart3_dirRx();
+    void setLineDirTx(int line);
+    void setLineDirRx(int line);
 
     void timerTick(void);
     void replyFinished(QNetworkReply* reply);

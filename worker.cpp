@@ -2,7 +2,9 @@
 
 Worker::Worker(QObject *parent) :  QObject(parent)
 {
-    spCon1 =  new AbstractSerial();
+    line1.setDeviceName("/dev/ttyO1");
+    line2.setDeviceName("/dev/ttyO2");
+    line3.setDeviceName("/dev/ttyO4");
 
     //Зареждата се настройките от settings.xml
     QFile xmlFile("settings.xml");
@@ -31,11 +33,12 @@ Worker::Worker(QObject *parent) :  QObject(parent)
             QDomElement elm= node.toElement();            
             qDebug() << "node:" << elm.tagName() << ":" << elm.text();
             if(elm.tagName()=="configName") settings.configName=elm.text();
-            if(elm.tagName()=="serialPort1") settings.serialPort1=elm.text();
             if(elm.tagName()=="postURL") settings.postURL=elm.text();
             if(elm.tagName()=="customer") settings.customer=elm.text();
-            if(elm.tagName()=="id") settings.id=elm.text();
+            if(elm.tagName()=="customerId") settings.customerId=elm.text();
             if(elm.tagName()=="email") settings.email=elm.text();
+            if(elm.tagName()=="locationName") settings.locationName=elm.text();
+            if(elm.tagName()=="locationId") settings.locationId=elm.text();
 
             if(elm.tagName()=="readPeriod") settings.readPeriod=elm.text().toInt();
             if(settings.readPeriod<1) settings.readPeriod = 1;
@@ -54,24 +57,35 @@ Worker::Worker(QObject *parent) :  QObject(parent)
             //Данни за силоза
             if(elm.tagName()=="silo")
             {
-                QString siloName = elm.attribute("name","N/A");
-                QString siloLocation = elm.attribute("location","N/A");
-                settings.siloName=siloName;
-                settings.siloLocation=siloLocation;
-                qDebug() << "silo name:" << siloName << "  location:" << siloLocation;
+                settings.siloName = elm.attribute("siloName","N/A");
+                qDebug() << "silo name:" << settings.siloName;
                 QDomNodeList controllers = node.childNodes();
                 //Извличане на данните за контролерите на силоза
                 for(int j=0 ; j< controllers.count() ; j++)
                 {
                     QDomNode nodeCont = controllers.at(j);
                     QDomElement elmCont = nodeCont.toElement();
-                    int address = elmCont.attribute("rs485","-1").toInt();
-                    if(address!=-1) settings.controllers.append(elmCont.attribute("rs485",""));
-                    QString version = elmCont.attribute("version","N/A");
-                    qDebug() << "   controller address:" << address << " firmware version:" << version;
+
+                    Controller ctrl;
+                    ctrl.address = elmCont.attribute("rs485","-1").toInt();
+                    ctrl.line = elmCont.attribute("line","-1").toInt();
+                    ctrl.version = elmCont.attribute("version","N/A");
+                    if((ctrl.address<0)||(ctrl.address>15))
+                    {
+                        qDebug() << "ERROR: Invalid controller address!";
+                        continue;
+                    }
+                    if((ctrl.line<1)||(ctrl.line>3))
+                    {
+                        qDebug() << "ERROR: Invalid controller line number!";
+                        continue;
+                    }
+
+                    listControllers.append(ctrl);
+                    qDebug() << "   controller address:" << ctrl.address << "  line:" << ctrl.line << " firmware version:" << ctrl.version;
                     //Извличане на данните за сензорите от трите 1-wire шини
                     QDomNodeList sensors = nodeCont.childNodes();
-                    qDebug() << "   there are " << sensors.count() << " sensors on controller " << address << "\r\n";
+                    qDebug() << "   there are " << sensors.count() << " sensors on controller " << ctrl.address << "on line " << ctrl.line << "\r\n";
                     for (int n=0 ; n< sensors.count() ; n++)
                     {
                         QString mac,rope,level,guid,secret;
@@ -131,24 +145,43 @@ Worker::Worker(QObject *parent) :  QObject(parent)
     exportRamFile_Settings();
     exportRamFile_SensorsTable();
 
-    //Отваряне на сериен порт
-    uart1_dirRx();
-    qDebug() << "Opening serial port...";
-    spCon1->setDeviceName(settings.serialPort1);
-    if (spCon1->open(QIODevice::ReadWrite | QIODevice::Unbuffered))
+    //Отваряне на сериините портове
+    setLineDirRx(1);
+    qDebug() << "Opening serial port for line 1...";
+    if (line1.open(QIODevice::ReadWrite | QIODevice::Unbuffered))
     {
-            qDebug() << "Serial device " << spCon1->deviceName() << " open in " << spCon1->openMode();
-            spCon1->setBaudRate(AbstractSerial::BaudRate1200);
-            spCon1->setDataBits(AbstractSerial::DataBits8);
-            spCon1->setParity(AbstractSerial::ParityNone);
+            qDebug() << "Serial device " << line1.deviceName() << " open in " << line1.openMode();
+            line1.setBaudRate(AbstractSerial::BaudRate1200);
+            line1.setDataBits(AbstractSerial::DataBits8);
+            line1.setParity(AbstractSerial::ParityNone);
     }
-    else qDebug() << "ERROR: Failed to open UART for connetion to ThermoLog controller!";
+    else qDebug() << "ERROR: Failed to open UART for line 1";
+
+    setLineDirRx(2);
+    qDebug() << "Opening serial port for line 2...";
+    if (line2.open(QIODevice::ReadWrite | QIODevice::Unbuffered))
+    {
+            qDebug() << "Serial device " << line2.deviceName() << " open in " << line2.openMode();
+            line2.setBaudRate(AbstractSerial::BaudRate1200);
+            line2.setDataBits(AbstractSerial::DataBits8);
+            line2.setParity(AbstractSerial::ParityNone);
+    }
+    else qDebug() << "ERROR: Failed to open UART for line 2";
+
+    setLineDirRx(3);
+    qDebug() << "Opening serial port for line 3...";
+    if (line3.open(QIODevice::ReadWrite | QIODevice::Unbuffered))
+    {
+            qDebug() << "Serial device " << line3.deviceName() << " open in " << line3.openMode();
+            line3.setBaudRate(AbstractSerial::BaudRate1200);
+            line3.setDataBits(AbstractSerial::DataBits8);
+            line3.setParity(AbstractSerial::ParityNone);
+    }
+    else qDebug() << "ERROR: Failed to open UART for line 3";
 
     manager = new QNetworkAccessManager(this);
     connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinished(QNetworkReply*)));
     request.setUrl(settings.postURL);
-
-    //udpSocket.setSocketOption(QAbstractSocket::MulticastTtlOption, 1);
 
     //Старта е отложен за да се даде време за DHCP и NTP
     loopCounter = 1;
@@ -167,6 +200,7 @@ Worker::~Worker()
 
 void Worker::timerTick(void)
 {
+    AbstractSerial *pLine;
     QString rxdata;
     QByteArray rxBytes;    
     QString timestamp; // Дата/час на последното прочитане на сензорите
@@ -179,27 +213,49 @@ void Worker::timerTick(void)
 
     qDebug() << "\r\ntick " << loopCounter++;
     //Serial Port
-    if(!spCon1->isOpen()) qDebug() << "Serial " << spCon1->deviceName() << " is not open!";
     timestamp = QDate::currentDate().toString("yyyy-MM-dT");
     timestamp += QTime::currentTime().toString("hh:mm:ss.zzzZ;");
 
+    for(int sensIdx=0 ; sensIdx<listSensors.count() ; sensIdx++) listSensors[sensIdx].value = "N/A";
     //Прочитане на сензорите
-    for(int i=0 ; i<settings.controllers.count() ; i++)
+    foreach(Controller ctrl, listControllers)
     {
+        switch(ctrl.line)
+        {
+        case 1:
+            pLine = &line1;
+            break;
+        case 2:
+            pLine = &line2;
+            break;
+        case 3:
+            pLine = &line3;
+            break;
+        default:
+            qDebug() << "ERROR: Invalid value for controller's line!";
+            continue;
+        }
+
+        if((ctrl.address<0)||(ctrl.address>15))
+        {
+            qDebug() << "ERROR: Invalid controller address!";
+            continue;
+        }
+
         for(int bus=0 ; bus<3 ; bus++)
         {
-            uart1_dirTx();
-            spCon1->write(QString("tst %1 %2\r\n").arg(settings.controllers[i]).arg(bus).toLatin1());
-            spCon1->flush();
-            uart1_dirRx();
+            setLineDirTx(ctrl.line);
+            pLine->write(QString("tst %1 %2\r\n").arg(ctrl.address).arg(bus).toLatin1());
+            pLine->flush();
+            setLineDirRx(ctrl.line);
             time.start();
             rxdata="";
             while(true)
             {
-                if(spCon1->bytesAvailable(false)>0)
+                if(pLine->bytesAvailable(false)>0)
                 {
                     rxBytes.clear();
-                    rxBytes = spCon1->readAll();
+                    rxBytes = pLine->readAll();
                     rxdata += QString(rxBytes);
                     if(rxdata.contains("\r\n"))
                     {
@@ -244,21 +300,6 @@ void Worker::timerTick(void)
             qDebug() << "sending POST...";
             postCounter=settings.postPeriod;
             QString strData = dataHeader;
-            //DUMMY SENSOR
-            strData +="10E36F67-570D-4B82-B4EB-B20831AAAD5B;"; //guid - dummy sensor
-            strData +="494F5931-0A06-45BC-84CB-8F6FD3D67FCD;"; //secret - dummy sensor
-            strData += QString::number(25+loopCounter%5) + ";"; //стойност
-            strData += timestamp;
-            strData +="</string>";
-            postData.clear();
-            postData=strData.toUtf8();
-
-            request.setRawHeader("Content-Type","text/xml;charset=utf-8");
-
-            manager->post(request, postData);
-            //qDebug() << "POST (dummy sensor):" << strData;
-
-            //Истински сензори
             foreach(Sensor sens, listSensors)
             {
                 strData =  dataHeader;
@@ -303,15 +344,15 @@ void Worker::timerTick(void)
         }
     }
 
-
     //Рестарт на таймера - цикъла е затворен
     timer.start(settings.readPeriod*1000);
 }
 
 void Worker::replyFinished(QNetworkReply * reply)
 {
-    qDebug() <<"post reply!";
 /*
+    qDebug() <<"post reply!";
+
     QList<QByteArray> hlist = reply->rawHeaderList();
     qDebug() << "headers num=" << hlist.count();
 
@@ -326,57 +367,48 @@ void Worker::replyFinished(QNetworkReply * reply)
         qDebug() << " DATA: " << data;
     }
     hlist.clear();
+
+    QByteArray respData = reply->readAll();
+    qDebug() << "respData: " << QString(respData);
 */
     //!!!!!!!!
     reply->deleteLater();
 }
 
-void Worker::uart1_dirRx()
+void Worker::setLineDirRx(int line)
 {
     std::fstream fs;
-    fs.open("/sys/class/gpio/gpio115/value", std::fstream::out);
+    switch(line)
+    {
+    case 1:
+        fs.open("/sys/class/gpio/gpio115/value", std::fstream::out);
+        break;
+    case 2:
+        fs.open("/sys/class/gpio/gpio49/value", std::fstream::out);
+        break;
+    case 3:
+        fs.open("/sys/class/gpio/gpio60/value", std::fstream::out);
+        break;
+    }
     fs << "0";
     fs.close();
 }
 
-void Worker::uart1_dirTx()
+void Worker::setLineDirTx(int line)
 {
     std::fstream fs;
-    fs.open("/sys/class/gpio/gpio115/value", std::fstream::out);
-    fs << "1";
-    fs.close();
-    usleep(5000);
-}
-
-void Worker::uart2_dirRx()
-{
-    std::fstream fs;
-    fs.open("/sys/class/gpio/gpio115/value", std::fstream::out);
-    fs << "0";
-    fs.close();
-}
-
-void Worker::uart2_dirTx()
-{
-    std::fstream fs;
-    fs.open("/sys/class/gpio/gpio115/value", std::fstream::out);
-    fs << "1";
-    fs.close();
-    usleep(5000);
-}
-
-void Worker::uart3_dirRx()
-{
-    std::fstream fs;
-    fs.open("/sys/class/gpio/gpio115/value", std::fstream::out);
-    fs << "0";
-    fs.close();
-}
-
-void Worker::uart3_dirTx()
-{
-    std::fstream fs;
-    fs.open("/sys/class/gpio/gpio115/value", std::fstream::out);
+    switch(line)
+    {
+    case 1:
+        fs.open("/sys/class/gpio/gpio115/value", std::fstream::out);
+        break;
+    case 2:
+        fs.open("/sys/class/gpio/gpio49/value", std::fstream::out);
+        break;
+    case 3:
+        fs.open("/sys/class/gpio/gpio60/value", std::fstream::out);
+        break;
+    }
     fs << "1";
     fs.close();
     usleep(5000);
@@ -399,7 +431,7 @@ bool Worker::exportRamFile_LiveDataTable(QString timestamp)
 
     table = "<div id=\"siloId\">\r\n";
     table += ("      Silo: <b>" + settings.siloName + "</b><br>\r\n");
-    table += ("  Location: <b>" + settings.siloLocation + "</b><br>\r\n");
+    table += ("  Location: <b>" + settings.locationName + "</b><br>\r\n");
     table += "</div>";
 
     table +=  "<table> \r\n";
@@ -451,9 +483,6 @@ bool Worker::exportRamFile_Settings()
     table += ("  <tr><th>Parameter</th><th>Value</th><tr>\r\n");
     table += ("  <tr><td>Custormer</td><td>" + settings.customer + "</td></tr>\r\n");
     table += ("  <tr><td>e-mail</td><td>" + settings.email + "</td></tr>\r\n");
-    table += ("  <tr><td>Controller line 1</td><td>" + settings.serialPort1 + "</td></tr>\r\n");
-    table += ("  <tr><td>Controller line 2</td><td>" + settings.serialPort2 + "</td></tr>\r\n");
-    table += ("  <tr><td>MODBUS line</td><td>" + settings.serialPort3 + "</td></tr>\r\n");
     table += ("  <tr><td>POST Url</td><td>" + settings.postURL + "</td></tr>\r\n");
     table += ("  <tr><td>Multicast address</td><td>" + settings.groupAddress.toString() + "</td></tr>\r\n");
     table += ("  <tr><td>Multicast port</td><td>" + QString::number(settings.groupPort) + "</td></tr>\r\n");
