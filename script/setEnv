@@ -8,10 +8,12 @@ echo 49 > /sys/class/gpio/export
 echo 115 > /sys/class/gpio/export
 echo 60 > /sys/class/gpio/export
 echo 48 > /sys/class/gpio/export
+echo 50 > /sys/class/gpio/export
 echo "out" > /sys/class/gpio/gpio115/direction
 echo "out" > /sys/class/gpio/gpio49/direction
 echo "out" > /sys/class/gpio/gpio60/direction
 echo "in" > /sys/class/gpio/gpio48/direction
+echo "out" > /sys/class/gpio/gpio50/direction
 
 mkdir /mnt/ramdisk
 mount -t tmpfs -o size=4m tmpfs /mnt/ramdisk

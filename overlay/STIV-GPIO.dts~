@@ -40,8 +40,8 @@
 				0x044 0x07	/* P9_23  49 OUTPUT MODE7 - rs485 direction select for UART2 */
 				0x078 0x07	/* P9_12  60 OUTPUT MODE7 - rs485 direction select for UART4 */
 
-				0x040 0x37	/* P9_15  48 INPUT  MODE7 pullup - allow settings.xml upload */
-				0x048 0x07	/* P9_14  50 OUTPUT MODE7 - Heartbeat seagnal toggled on each timer tick reading loop */
+				0x044 0x37	/* P9_15  48 INPUT MODE7pullup - allow settings.xml upload */
+				0x1AC 0x07	/* P9_25 117 OUTPUT MODE7 - Heartbeat seagnal toggled on each timer tick reading loop */
                      		/*Added by Svilen Stavrev: END*/
 
                                /* OUTPUT  GPIO(mode7) 0x07 pulldown, 0x17 pullup, 0x?f no pullup/down */

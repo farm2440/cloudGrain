@@ -13,6 +13,7 @@ Worker::Worker(QObject *parent) :  QObject(parent)
         qDebug() << "ERROR: Unable to open settings.xml";
         //TODO: Трябва да има healthservice за всички клиенти където да се пращат съобщения
         //за грешки общо от всички клиенти които ние да можем да следим.
+        while(1){}
     }
     else
     {
@@ -178,6 +179,9 @@ Worker::Worker(QObject *parent) :  QObject(parent)
             line3.setParity(AbstractSerial::ParityNone);
     }
     else qDebug() << "ERROR: Failed to open UART for line 3";
+    line1.close();
+    line2.close();
+    line3.close();
 
     manager = new QNetworkAccessManager(this);
     connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinished(QNetworkReply*)));
@@ -212,10 +216,17 @@ void Worker::timerTick(void)
     dataHeader += (settings.email + ";");
 
     qDebug() << "\r\ntick " << loopCounter++;
-    //Serial Port
+
+    //HEARTBEAT
+    //На всеки цикъл състоянието на този пин се обръща и се нулира външно свързан хардуерен WATCHDOG
+    std::fstream heartbeat;
+    heartbeat.open("/sys/class/gpio/gpio50/value", std::fstream::out);
+    if((loopCounter%2)==0) heartbeat << "0";
+    else heartbeat << "1";
+    heartbeat.close();
+
     timestamp = QDate::currentDate().toString("yyyy-MM-dT");
     timestamp += QTime::currentTime().toString("hh:mm:ss.zzzZ;");
-
     for(int sensIdx=0 ; sensIdx<listSensors.count() ; sensIdx++) listSensors[sensIdx].value = "N/A";
     //Прочитане на сензорите
     foreach(Controller ctrl, listControllers)
@@ -242,6 +253,7 @@ void Worker::timerTick(void)
             continue;
         }
 
+        pLine->open(QIODevice::ReadWrite);
         for(int bus=0 ; bus<3 ; bus++)
         {
             setLineDirTx(ctrl.line);
@@ -285,6 +297,7 @@ void Worker::timerTick(void)
                 }
             }
         }
+        pLine->close();
     }
 
     qDebug() << "exportRamFile with timestamp:" << timestamp;
@@ -343,6 +356,7 @@ void Worker::timerTick(void)
             }            
         }
     }
+    qDebug() << "multicast sent.";
 
     //Рестарт на таймера - цикъла е затворен
     timer.start(settings.readPeriod*1000);
