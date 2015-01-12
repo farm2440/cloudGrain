@@ -2,8 +2,8 @@
 #define DEFINITIONS_H
 
 #define STR_VERSION     1
-#define STR_SUBVERSION  1
-#define STR_COMPILATION 32
+#define STR_SUBVERSION  0
+#define STR_COMPILATION 33
 
 
 

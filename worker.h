@@ -113,6 +113,7 @@ public slots:
     bool exportRamFile_SensorsTable();
     bool exportRamFile_Settings();
     bool exportRamFile_Version();
+    bool exportRamFile_Error(QString errMsg);
 
     QString getSensorValue(int rope, int level); //Връща стойността за сензор от listSensors    
 };

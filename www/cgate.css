@@ -79,3 +79,13 @@ th,td {
     text-align:right;
     padding:5px;
 }
+
+#errMsg {
+		background-color:#eeeeee;
+		color:red;
+		padding:5px;
+}
+
+#caption{
+	color: white;
+}

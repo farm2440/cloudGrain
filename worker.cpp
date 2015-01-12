@@ -2,6 +2,7 @@
 
 Worker::Worker(QObject *parent) :  QObject(parent)
 {
+    exportRamFile_Error("WARNING: Starting the service. Please wait...");
     line1.setDeviceName("/dev/ttyO1");
     line2.setDeviceName("/dev/ttyO2");
     line3.setDeviceName("/dev/ttyO4");
@@ -13,6 +14,7 @@ Worker::Worker(QObject *parent) :  QObject(parent)
         qDebug() << "ERROR: Unable to open settings.xml";
         //TODO: Трябва да има healthservice за всички клиенти където да се пращат съобщения
         //за грешки общо от всички клиенти които ние да можем да следим.
+        exportRamFile_Error("ERROR:Unable to open settings xml file");
         while(1){}
     }
     else
@@ -25,7 +27,12 @@ Worker::Worker(QObject *parent) :  QObject(parent)
 
         qDebug() << "parsing xml file...";
         qDebug() << "rootName=" << rootName;
-        if(rootName!="cloudGrain") qDebug() << "ERROR: Error parsing XML. Root element must be cloudGrain.";
+        if(rootName!="cGate")
+        {
+            qDebug() << "ERROR: Failed parsing XML. Root element must be cGate.";
+            exportRamFile_Error("ERROR: Failed parsing XML. Root element must be cGate.");
+            while(1){}
+        }
 
         QDomNodeList childNodesList = root.childNodes();
         for(int i=0 ; i<childNodesList.count() ; i++)
@@ -533,6 +540,37 @@ bool Worker::exportRamFile_Version()
     }
     ramFile.write(version.toLatin1());
     ramFile.close();
+    return true;
+}
+
+bool Worker::exportRamFile_Error(QString errMsg)
+{
+
+    QString htmlStart = "<div id=\"errMsg\"><b>";
+    QString htmlEnd = "</b></div>";
+    QString html = htmlStart + errMsg + htmlEnd;
+
+    QFile ramFile("/mnt/ramdisk/livedatatable.html");
+    if(!ramFile.open(QIODevice::WriteOnly))
+    {
+        qDebug() << "ERROR: failed opening file in RAM /mnt/ramdisk/settings.html";
+    }
+    else
+    {
+        ramFile.write(html.toLatin1());
+        ramFile.close();
+    }
+
+    ramFile.setFileName("/mnt/ramdisk/settings.html");
+    if(!ramFile.open(QIODevice::WriteOnly))
+    {
+        qDebug() << "ERROR: failed opening file in RAM /mnt/ramdisk/settings.html";
+    }
+    else
+    {
+        ramFile.write(html.toLatin1());
+        ramFile.close();
+    }
     return true;
 }
 

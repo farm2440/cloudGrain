@@ -59,7 +59,7 @@ iframe {
 #TableContainer{
 	width: 100%;
 	height: 100%;
-	padding-bottom: 5px;
+	padding-bottom: 7px;
 }
 
 #table {
@@ -78,4 +78,13 @@ th,td {
     clear:both;
     text-align:right;
     padding:5px;
+}
+
+#errMsg {
+		background-color:#eeeeee;
+		color:red;
+}
+
+#caption{
+	color: white;
 }

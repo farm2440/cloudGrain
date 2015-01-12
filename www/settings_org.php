@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>ThermoLog cGate - Settings upload</title>
+<title>ThermoLog cGate - Live data</title>
 <meta name="generator" content="Bluefish 2.2.5" >
 <meta name="author" content="Svilen" >
-<meta name="date" content="2015-01-12T21:03:29+0200" >
+<meta name="date" content="2015-01-12T21:02:24+0200" >
 <meta name="copyright" content="">
 <meta name="description" content="">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">

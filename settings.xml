@@ -1,4 +1,4 @@
-<cloudGrain>
+<cGate>
         <configName>Test</configName>
 	<postURL>http://devicewebvarnaservice.azurewebsites.net/RestService/SimpleWriteSingleValueDeviceData</postURL>	
 	<customer>ACME</customer>
@@ -71,4 +71,4 @@
 
              </controller>
         </silo>
-</cloudGrain>
+</cGate>
