@@ -1,13 +1,10 @@
-<?php
-	session_start();
-?>
 <!DOCTYPE html>
 <html>
 <head>
 <title>ThermoLog cGate - Settings upload</title>
 <meta name="generator" content="Bluefish 2.2.5" >
 <meta name="author" content="Svilen" >
-<meta name="date" content="2015-01-18T00:49:47+0200" >
+<meta name="date" content="2015-01-17T23:13:04+0200" >
 <meta name="copyright" content="">
 <meta name="description" content="">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
@@ -19,8 +16,7 @@
 </style>
 </head>
 
-
-<body>
+<body onload="JavaScript:timedRefresh(20000);">
 <table id="layoutTable">
 
 	<tr>
@@ -38,29 +34,16 @@
 	
 	<tr>
 		<td id="Nav">
-	   	<div id="nextNav">
+	     <div id="nextNav">
 	     		<a href="index.php">Live Data</a>
-	     	</div>
-	     	<div id="nextNav">
+	     </div>
+	     <div id="nextNav">
 	     		<a href="sensorstable.php">Sensors</a>
-	     	</div>
-	     	<div id="nextNav">
-	     		<a href="settings.php">Settings</a>
-	     	</div>
+	     </div>
+	     <div id="currentNav">Settings</div>
 		</td>
-
 		<td id="DataSection">
-			<?php
-				$upload_enabled = file_get_contents('/sys/class/gpio/gpio48/value');
-				if($upload_enabled==0) 
-				{
-					if ($_SESSION['readyToReset']=='YES')
-					{
-						echo "Restarting. This will take about 60 seconds.";
-					}
-				}
-				else echo 'Remote restart is locked by hardware.';
-			?> 
+
 		</td>
 	</tr>
 
@@ -71,12 +54,6 @@
 	</tr>
 </table>
 </body>
+
 </html>
 
-<?php
-	if ($_SESSION['readyToReset']=='YES')
-	{
-		$_SESSION['readyToReset']='NO';
-   	exec('bash -c "exec nohup setsid reboot > /dev/null 2>&1 &"');
-	}
-?>

@@ -9,27 +9,45 @@ iframe {
 	height: 100%;
 }
 
-#logo {
-    float: left;
+table#layoutTable
+{
+	width: 100%;
+	border: 0px;
+	border-collapse: collapse;
+	padding: 0px;
 }
+
+#logo
+{
+	border-collapse: collapse;
+	background-color: black;
+	padding: 0px;
+	height: 100%;
+}
+
 #header {
+	 border-collapse: collapse;
     background-color:black;
     color:#FF7700;
     text-align:center;
-    padding: 5px;
-    padding-right: 213px;
-    height:120px;
+    vertical-align: middle;
+    height: 100%;
+    width: 100%;
 }
+
 #Nav {
+   vertical-align: top;
+   border-collapse: collapse;
+
 	line-height:30px;
 	background-color:#eeeeee;
+	
 	height: 480px;
-	width:205px;
-	float:left;
+
 	padding-left: 7px;
-	padding-top: 5px;
+	padding-top: 15px;
 	padding-bottom: 5px;
-	clear: left;	
+	padding-right: 0px;
 }
 #currentNav
 {
@@ -37,6 +55,7 @@ iframe {
 	padding-top: 5px;
 	padding-left: 24px;
 	padding-bottom: 5px;
+	padding-right: 0px;
 	color: white;
 }
 #nextNav
@@ -47,35 +66,33 @@ iframe {
 }
 
 #DataSection {
+	 vertical-align: top;
     padding:15px;
-    float: left;
-    height: 60%;
 }
+
 #siloId {
 	text-align: left;
 	color: white;
 	padding: 7px;
 }
-#TableContainer{
-	width: 100%;
-	height: 100%;
-	padding-bottom: 7px;
+
+
+
+#liveDataTable{
+	background-color: #eeeeee;
+	border-collapse: collapse;
+	border: 2px solid gray;
 }
 
-#table {
-	color: white;
-}
-
-th,td {
-   background-color: white;
-   color: black;
-   padding: 5px;
+#ld{
+border: 1px solid gray;
+align-content: center;
+padding: 5px;
 }
 
 #footer {
     background-color:black;
     color:white;
-    clear:both;
     text-align:right;
     padding:5px;
 }

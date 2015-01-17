@@ -455,20 +455,20 @@ bool Worker::exportRamFile_LiveDataTable(QString timestamp)
     table += ("  Location: <b>" + settings.locationName + "</b><br>\r\n");
     table += "</div>";
 
-    table +=  "<table> \r\n";
+    table +=  "<table id=\"liveDataTable\"> \r\n";
     table += ("  <caption>" + _timestamp + "</caption>\r\n");
 
     //първи ред в таблицата - хедъри
-    table += ("<tr><th>level/rope</th>");
-    for(int r=0 ; r<listRopes.count() ; r++) table+=("<th>" + QString::number(listRopes[r]) + "</th>");
+    table += ("<tr><th  id=\"ld\">level/rope</th>");
+    for(int r=0 ; r<listRopes.count() ; r++) table+=("<th  id=\"ld\">" + QString::number(listRopes[r]) + "</th>");
     table += "</tr>\r\n";
     //Останалите редове в таблицата - първа колона е номер на ниво останалите са температура на датчиците
     for(int l=0 ; l<listLevels.count() ; l++)
     {
-        table += ("<tr><th>" + QString::number(listLevels[l]) +"</th>");//Номер на ниво
+        table += ("<tr><th  id=\"ld\">" + QString::number(listLevels[l]) +"</th>");//Номер на ниво
         for(int r=0 ; r<listRopes.count() ; r++)
         {
-            table += ("<td>" + getSensorValue(listRopes[r],listLevels[l])+ "</td>");
+            table += ("<td  id=\"ld\">" + getSensorValue(listRopes[r],listLevels[l])+ "</td>");
         }
         table += "</tr>\r\n";
     }
@@ -497,20 +497,20 @@ bool Worker::exportRamFile_Settings()
     //Генериране на таблица с актуални стойности
     QString table;
 
-    table +=  "<table> \r\n";
+    table +=  "<table id=\"liveDataTable\"> \r\n";
     table += ("  <caption>Configuration name: " + settings.configName + "</caption>\r\n");
 
     //първи ред в таблицата - хедъри
-    table += ("  <tr><th>Parameter</th><th>Value</th><tr>\r\n");
-    table += ("  <tr><td>Custormer</td><td>" + settings.customer + "</td></tr>\r\n");
-    table += ("  <tr><td>e-mail</td><td>" + settings.email + "</td></tr>\r\n");
-    table += ("  <tr><td>POST Url</td><td>" + settings.postURL + "</td></tr>\r\n");
-    table += ("  <tr><td>Multicast address</td><td>" + settings.groupAddress.toString() + "</td></tr>\r\n");
-    table += ("  <tr><td>Multicast port</td><td>" + QString::number(settings.groupPort) + "</td></tr>\r\n");
-    table += ("  <tr><td>readPeriod</td><td>" + QString::number(settings.readPeriod) + "</td></tr>\r\n");
-    table += ("  <tr><td>postPeriod</td><td>" + QString::number(settings.postPeriod) + "</td></tr>\r\n");
-    table += ("  <tr><td>mcastPeriod</td><td>" + QString::number(settings.mcastPeriod) + "</td></tr>\r\n");
-    //table += ("  <tr><td> </td><td>" +  + "</td></tr>\r\n");
+    table += ("  <tr><th id=\"ld\">Parameter</th><th id=\"ld\">Value</th><tr>\r\n");
+    table += ("  <tr><td id=\"ld\">Custormer</td><td id=\"ld\">" + settings.customer + "</td></tr>\r\n");
+    table += ("  <tr><td id=\"ld\">e-mail</td><td id=\"ld\">" + settings.email + "</td></tr>\r\n");
+    table += ("  <tr><td id=\"ld\">POST Url</td><td id=\"ld\">" + settings.postURL + "</td></tr>\r\n");
+    table += ("  <tr><td id=\"ld\">Multicast address</td><td id=\"ld\">" + settings.groupAddress.toString() + "</td></tr>\r\n");
+    table += ("  <tr><td id=\"ld\">Multicast port</td><td id=\"ld\">" + QString::number(settings.groupPort) + "</td></tr>\r\n");
+    table += ("  <tr><td id=\"ld\">readPeriod</td><td id=\"ld\">" + QString::number(settings.readPeriod) + "</td></tr>\r\n");
+    table += ("  <tr><td id=\"ld\">postPeriod</td><td id=\"ld\">" + QString::number(settings.postPeriod) + "</td></tr>\r\n");
+    table += ("  <tr><td id=\"ld\">mcastPeriod</td><td id=\"ld\">" + QString::number(settings.mcastPeriod) + "</td></tr>\r\n");
+    //table += ("  <tr><td id=\"ld\"> </td><td>" +  + "</td id=\"ld\"></tr>\r\n");
     table += "</table>\r\n";
 
 
