@@ -7,7 +7,7 @@
 <title>ThermoLog cGate - Settings upload</title>
 <meta name="generator" content="Bluefish 2.2.5" >
 <meta name="author" content="Svilen" >
-<meta name="date" content="2015-01-18T00:49:44+0200" >
+<meta name="date" content="2015-01-18T01:00:07+0200" >
 <meta name="copyright" content="">
 <meta name="description" content="">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
@@ -76,7 +76,6 @@
 <?php
 	if ($_SESSION['readyToReset']=='YES')
 	{
-
 		$_SESSION['readyToReset']='NO';
    	exec('bash -c "exec nohup setsid reboot > /dev/null 2>&1 &"');
 	}

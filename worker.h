@@ -110,12 +110,14 @@ public slots:
     void replyFinished(QNetworkReply* reply);
 
     bool exportRamFile_LiveDataTable(QString timestamp); //записва актуални данни в /mnt/ramdisk/livedata.html
-    bool exportRamFile_SensorsTable();
+    bool exportRamFile_SensorsTable(QString timestamp);
     bool exportRamFile_Settings();
     bool exportRamFile_Version();
     bool exportRamFile_Error(QString errMsg);
 
     QString getSensorValue(int rope, int level); //Връща стойността за сензор от listSensors    
+    QString getSensorMac(int rope, int level);
+    QString getSensorType(int rope, int level);
 };
 
 #endif // WORKER_H

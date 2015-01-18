@@ -8,7 +8,7 @@
 <title>ThermoLog cGate - Settings upload</title>
 <meta name="generator" content="Bluefish 2.2.5" >
 <meta name="author" content="Svilen" >
-<meta name="date" content="2015-01-18T00:19:35+0200" >
+<meta name="date" content="2015-01-18T10:39:16+0200" >
 <meta name="copyright" content="">
 <meta name="description" content="">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
@@ -104,7 +104,7 @@
 
 	<tr>
 		<td id="footer" colspan="2">
-				<a href="www.etherino.net">www.etherino.net</a>
+				<a href="http://www.etherino.net">www.etherino.net</a>
 		</td>
 	</tr>
 </table>

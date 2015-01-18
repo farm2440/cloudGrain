@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>ThermoLog cGate - Sensors table</title>
+<title>ThermoLog cGate - Settings upload</title>
 <meta name="generator" content="Bluefish 2.2.5" >
 <meta name="author" content="Svilen" >
-<meta name="date" content="2015-01-17T12:16:08+0200" >
+<meta name="date" content="2015-01-18T10:35:35+0200" >
 <meta name="copyright" content="">
 <meta name="description" content="">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
@@ -13,53 +13,51 @@
 <meta http-equiv="expires" content="0">
 <link href="cgate.css" rel="stylesheet" type="text/css">
 <style type="text/css">
-
 </style>
-<script type="text/javascript">
-<!--
-   function timedRefresh(timeoutPeriod) 
-   {
-          setTimeout("location.reload(true);",timeoutPeriod);
-   }
-// -->
-</script>
 </head>
 
-
 <body onload="JavaScript:timedRefresh(20000);">
+<table id="layoutTable">
 
-	<div id="logo">
- 		<img src="logo.jpeg" width="213" height="120" alt="LOGO" longdesc="Etherino logo">
-	</div>
- 	
-	<div id="header">	 
-		<h1>ThermoLog cGate</h1>
-		<?php
-			$sensors = file_get_contents('/mnt/ramdisk/version.html');
-			echo $sensors;
-  		?>
-	</div>
-
-	<div id="Nav">
+	<tr>
+		<td id="logo">
+			<img src="logo.jpeg" width="213" height="120" alt="LOGO" longdesc="Etherino logo">
+ 		</td>
+ 		<td id="header">
+				<h1>ThermoLog cGate</h1>
+				<?php
+					$sensors = file_get_contents('/mnt/ramdisk/version.html');
+					echo $sensors;
+  				?>
+		</td>
+	</tr>
+	
+	<tr>
+		<td id="Nav">
 	     <div id="nextNav">
 	     		<a href="index.php">Live Data</a>
 	     </div>
 	     <div id="currentNav">Sensors</div>
-	     <div id="nextNav">
-	     		<a href="settings.php">Settings</a>
-	     </div>
-   </div>
-   <div id="DataSection"> 
-	    <div id="TableContainer">
-		    <?php
-				$sensors = file_get_contents('sensors.html');
+     		<div id="nextNav">
+     			<a href="settings.php">Settings</a>	     		
+     		</div>
+		</td>
+		
+		<td id="DataSection">
+   		<?php
+				$sensors = file_get_contents('/mnt/ramdisk/sensorstable.html');
 				echo $sensors;
-  			?>
-  	   </div>
-	</div>
+			?>
+		</td>
+	</tr>
 
-	<div id="footer">
-		<a href="www.etherino.net">www.etherino.net</a>
-	</div>
+	<tr>
+		<td id="footer" colspan="2">
+				<a href="http://www.etherino.net">www.etherino.net</a>
+		</td>
+	</tr>
+</table>
 </body>
+
 </html>
+

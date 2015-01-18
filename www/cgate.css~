@@ -76,11 +76,7 @@ table#layoutTable
 	padding: 7px;
 }
 
-#TableContainer{
-	width: 100%;
-	height: 100%;
-	padding-bottom: 7px;
-}
+
 
 #liveDataTable{
 	background-color: #eeeeee;

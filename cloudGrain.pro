@@ -14,7 +14,8 @@ OTHER_FILES += README.txt \
     settings.xml \
     www/sensors.php \
     README.md \
-    script/setEnv
+    script/setEnv \
+    script/snum.txt
 HEADERS += definitions.h \
     worker.h
 

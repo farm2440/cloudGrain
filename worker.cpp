@@ -96,7 +96,7 @@ Worker::Worker(QObject *parent) :  QObject(parent)
                     qDebug() << "   there are " << sensors.count() << " sensors on controller " << ctrl.address << "on line " << ctrl.line << "\r\n";
                     for (int n=0 ; n< sensors.count() ; n++)
                     {
-                        QString mac,rope,level,guid,secret;
+                        QString mac,rope,level,guid,secret,type;
                         QDomNodeList sparams = sensors.at(n).childNodes();
                         for( int m=0 ; m<sparams.count() ; m++)
                         {
@@ -106,11 +106,13 @@ Worker::Worker(QObject *parent) :  QObject(parent)
                             if(elmParam.tagName()=="level") level=elmParam.text();
                             if(elmParam.tagName()=="guid") guid=elmParam.text();
                             if(elmParam.tagName()=="secret") secret=elmParam.text();
+                            if(elmParam.tagName()=="type") type=elmParam.text();
                         }
                         if(mac=="") continue;
                         qDebug() << "   mac:" << mac;
                         qDebug() << "   rope:" << rope;
                         qDebug() << "   level:" << level;
+                        qDebug() << "   type:" << type;
                         qDebug() << "   guid:" << guid;
                         qDebug() << "   secret:" << secret << "\r\n";
                         //Сензора се добавя в списъка
@@ -118,6 +120,7 @@ Worker::Worker(QObject *parent) :  QObject(parent)
                         s.guid=guid;
                         s.level=level;
                         s.mac=mac;
+                        s.type=type;
                         s.rope=rope;
                         s.secret=secret;
                         s.value="N/A";
@@ -151,7 +154,6 @@ Worker::Worker(QObject *parent) :  QObject(parent)
 
     exportRamFile_Version();
     exportRamFile_Settings();
-    exportRamFile_SensorsTable();
 
     //Отваряне на сериините портове
     setLineDirRx(1);
@@ -309,6 +311,7 @@ void Worker::timerTick(void)
 
     qDebug() << "exportRamFile with timestamp:" << timestamp;
     exportRamFile_LiveDataTable(timestamp);
+    exportRamFile_SensorsTable(timestamp);
 
     //Подготовка на данните  за POST
     qDebug() << "postCounter=" <<postCounter << "   mcastCounter=" << mcastCounter;
@@ -441,7 +444,7 @@ bool Worker::exportRamFile_LiveDataTable(QString timestamp)
     /* Генерира се html таблица която съдържа актуални данни от сензорите.
        След като е готово съдържанието на html-а  то се записва във файл във RAM паметта.
        В /mnt/ramdisk е монтирана от стартиращия скрипт RAM-базирана файлова система.
-       Файлът /mnt/ramdisk/sensors.html съдържа данните за настройки и актуални стойности на сензорите
+       Файлът /mnt/ramdisk/livedatatable.html съдържа данните за настройки и актуални стойности на сензорите
        Този файл ще се импортира като фрейм в страницата livedata на уеб интерфейса
     */
 
@@ -474,7 +477,6 @@ bool Worker::exportRamFile_LiveDataTable(QString timestamp)
     }
     table += "</table>";
 
-
     //Готовия html се записва в RAM файла
     QFile ramFile("/mnt/ramdisk/livedatatable.html");
     if(!ramFile.open(QIODevice::WriteOnly))
@@ -487,8 +489,63 @@ bool Worker::exportRamFile_LiveDataTable(QString timestamp)
     return true;
 }
 
-bool Worker::exportRamFile_SensorsTable()
+bool Worker::exportRamFile_SensorsTable(QString timestamp)
 {
+    /* Генерира се html таблица която съдържа актуални данни от сензорите.
+       След като е готово съдържанието на html-а  то се записва във файл във RAM паметта.
+       В /mnt/ramdisk е монтирана от стартиращия скрипт RAM-базирана файлова система.
+       Файлът /mnt/ramdisk/sensorstable.html съдържа данните за настройки и актуални стойности на сензорите
+       Този файл ще се импортира като фрейм в страницата livedata на уеб интерфейса
+    */
+
+    //Генериране на таблица с актуални стойности
+    QString table;
+    QString _timestamp = timestamp.left(timestamp.indexOf('T')) + "   " + timestamp.mid(timestamp.indexOf('T')+1, 8);
+    //Генерира се и таблица с МАС адресите, типа, мястото и измерената стойност
+    table = "<div id=\"siloId\">\r\n";
+    table += ("      Silo: <b>" + settings.siloName + "</b><br>\r\n");
+    table += ("  Location: <b>" + settings.locationName + "</b><br>\r\n");
+    table += "</div>";
+
+    table +=  "<table id=\"liveDataTable\"> \r\n";
+    table += ("  <caption>" + _timestamp + "</caption>\r\n");
+
+    //първи ред в таблицата - хедъри
+    table += ("<tr><th id=\"ld\">N</th>");
+    table += ("<th id=\"ld\">MAC</th>");
+    table += ("<th id=\"ld\">T</th>");
+    table += ("<th id=\"ld\">R</th>");
+    table += ("<th id=\"ld\">L</th>");
+    table += ("<th id=\"ld\">VALUE</th>");
+    table += "</tr>\r\n";
+    int sensIdx=1;
+    //Останалите редове в таблицата - първа колона е номер на ниво останалите са температура на датчиците
+    for(int l=0 ; l<listLevels.count() ; l++)
+    {
+        for(int r=0 ; r<listRopes.count() ; r++)
+        {
+            QString mac=getSensorMac(listRopes[r],listLevels[l]);
+            if(mac=="---") continue;
+            table += ("<tr><th id=\"ld\">" + QString::number(sensIdx) +"</th>");//Номер на ниво
+            sensIdx++;
+            table += ("<td id=\"ld\">" + getSensorMac(listRopes[r],listLevels[l])+ "</td>");
+            table += ("<td id=\"ld\">" + getSensorType(listRopes[r],listLevels[l])+ "</td>");
+            table += ("<td id=\"ld\">" + QString::number(listRopes[r]) + "</td>");
+            table += ("<td id=\"ld\">" + QString::number(listLevels[l]) + "</td>");
+            table += ("<td id=\"ld\">" + getSensorValue(listRopes[r],listLevels[l])+ "</td>");
+        }
+        table += "</tr>\r\n";
+    }
+    table += "</table>";
+    //Готовия html се записва в RAM файла
+    QFile ramFile("/mnt/ramdisk/sensorstable.html");
+    if(!ramFile.open(QIODevice::WriteOnly))
+    {
+        qDebug() << "ERROR: failed opening file in RAM /mnt/ramdisk/livedatatable.html";
+        return false;
+    }
+    ramFile.write(table.toLatin1());
+    ramFile.close();
     return true;
 }
 
@@ -578,14 +635,25 @@ QString Worker::getSensorValue(int rope, int level)
 {//Връща стойността за сензор от listSensors
     foreach(Sensor s, listSensors)
     {
-        if((s.rope.toInt()==rope) && (s.level.toInt()==level))
-        {
-//            qDebug() << "rope:" << rope << "  level:" <<level << "  value:" <<s.value;
-            return s.value;
-        }
+        if((s.rope.toInt()==rope) && (s.level.toInt()==level))     return s.value;
     }
-
-
     return "---";
 }
 
+QString Worker::getSensorMac(int rope, int level)
+{//Връща стойността за сензор от listSensors
+    foreach(Sensor s, listSensors)
+    {
+        if((s.rope.toInt()==rope) && (s.level.toInt()==level))     return s.mac;
+    }
+    return "---";
+}
+
+QString Worker::getSensorType(int rope, int level)
+{//Връща стойността за сензор от listSensors
+    foreach(Sensor s, listSensors)
+    {
+        if((s.rope.toInt()==rope) && (s.level.toInt()==level))     return s.type;
+    }
+    return "---";
+}

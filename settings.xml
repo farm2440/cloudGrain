@@ -12,6 +12,11 @@
         <groupAddress>239.0.0.052</groupAddress>
         <groupPort>9025</groupPort>
 
+        <setIp>dhcp</setIp>
+        <ip>192.168.1.121</ip>
+        <mask>255.255.255.0</mask>
+        <gateway>192.168.1.1</gateway>
+
         <locationName>Grain Plant Suvorovo</locationName>
         <locationId>10E36F67-1234-5678-B4EB-B20831AAAD5B</locationId>
 

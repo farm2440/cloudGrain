@@ -3,7 +3,7 @@
 
 #define STR_VERSION     1
 #define STR_SUBVERSION  0
-#define STR_COMPILATION 35
+#define STR_COMPILATION 37
 
 
 #endif // DEFINITIONS_H
