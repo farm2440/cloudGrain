@@ -55,9 +55,6 @@ struct Sensor
     QString mac;
     QString rope;
     QString level;
-    QString guid;
-    QString secret;
-    QString type;
 
     QString value;
     QString timestamp;
@@ -117,7 +114,7 @@ public slots:
 
     QString getSensorValue(int rope, int level); //Връща стойността за сензор от listSensors    
     QString getSensorMac(int rope, int level);
-    QString getSensorType(int rope, int level);
+    QString getSensorType(QString sensorMAC);
 };
 
 #endif // WORKER_H

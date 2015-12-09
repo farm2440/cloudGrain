@@ -96,7 +96,7 @@ Worker::Worker(QObject *parent) :  QObject(parent)
                     qDebug() << "   there are " << sensors.count() << " sensors on controller " << ctrl.address << "on line " << ctrl.line << "\r\n";
                     for (int n=0 ; n< sensors.count() ; n++)
                     {
-                        QString mac,rope,level,guid,secret,type;
+                        QString mac,rope,level;
                         QDomNodeList sparams = sensors.at(n).childNodes();
                         for( int m=0 ; m<sparams.count() ; m++)
                         {
@@ -104,25 +104,16 @@ Worker::Worker(QObject *parent) :  QObject(parent)
                             if(elmParam.tagName()=="mac") mac=elmParam.text();
                             if(elmParam.tagName()=="rope") rope=elmParam.text();
                             if(elmParam.tagName()=="level") level=elmParam.text();
-                            if(elmParam.tagName()=="guid") guid=elmParam.text();
-                            if(elmParam.tagName()=="secret") secret=elmParam.text();
-                            if(elmParam.tagName()=="type") type=elmParam.text();
                         }
                         if(mac=="") continue;
                         qDebug() << "   mac:" << mac;
                         qDebug() << "   rope:" << rope;
-                        qDebug() << "   level:" << level;
-                        qDebug() << "   type:" << type;
-                        qDebug() << "   guid:" << guid;
-                        qDebug() << "   secret:" << secret << "\r\n";
+                        qDebug() << "   level:" << level << "\r\n";
                         //Сензора се добавя в списъка
                         Sensor s;
-                        s.guid=guid;
                         s.level=level;
                         s.mac=mac;
-                        s.type=type;
                         s.rope=rope;
-                        s.secret=secret;
                         s.value="N/A";
                         s.timestamp="N/A";
                         listSensors.append(s);
@@ -222,8 +213,7 @@ void Worker::timerTick(void)
     QByteArray postData;
     QString dataHeader;
     dataHeader="<string xmlns=\"http://schemas.microsoft.com/2003/10/Serialization/\">";
-    dataHeader += (settings.email + ";");
-
+    dataHeader="<![CDATA[";
     qDebug() << "\r\ntick " << loopCounter++;
 
     //HEARTBEAT
@@ -278,6 +268,7 @@ void Worker::timerTick(void)
                     rxBytes.clear();
                     rxBytes = pLine->readAll();
                     rxdata += QString(rxBytes);
+                    time.restart();
                     if(rxdata.contains("\r\n"))
                     {
                         int p = rxdata.indexOf("\r\n");
@@ -326,11 +317,11 @@ void Worker::timerTick(void)
             foreach(Sensor sens, listSensors)
             {
                 strData =  dataHeader;
-                strData += (sens.guid + ";");
-                strData += (sens.secret + ";");
+                strData += (sens.mac + ";");
                 strData += (sens.value + ";");
                 strData += timestamp;
 
+                strData +="]]>|";
                 strData +="</string>";
                 postData.clear();
                 postData=strData.toUtf8();
@@ -352,7 +343,6 @@ void Worker::timerTick(void)
             foreach(Sensor sens, listSensors)
             {
                 strDatagram = "<sensor>\r\n";
-                strDatagram += (" <type>" + sens.type + "</type>\r\n");
                 strDatagram += (" <rope>" + sens.rope + "</rope>\r\n");
                 strDatagram += (" <level>" + sens.level + "</level>\r\n");
                 strDatagram += (" <mac>" + sens.mac + "</mac>\r\n");
@@ -529,7 +519,7 @@ bool Worker::exportRamFile_SensorsTable(QString timestamp)
             table += ("<tr><th id=\"ld\">" + QString::number(sensIdx) +"</th>");//Номер на ниво
             sensIdx++;
             table += ("<td id=\"ld\">" + getSensorMac(listRopes[r],listLevels[l])+ "</td>");
-            table += ("<td id=\"ld\">" + getSensorType(listRopes[r],listLevels[l])+ "</td>");
+            table += ("<td id=\"ld\">" + getSensorType(mac)+ "</td>");
             table += ("<td id=\"ld\">" + QString::number(listRopes[r]) + "</td>");
             table += ("<td id=\"ld\">" + QString::number(listLevels[l]) + "</td>");
             table += ("<td id=\"ld\">" + getSensorValue(listRopes[r],listLevels[l])+ "</td>");
@@ -649,11 +639,10 @@ QString Worker::getSensorMac(int rope, int level)
     return "---";
 }
 
-QString Worker::getSensorType(int rope, int level)
-{//Връща стойността за сензор от listSensors
-    foreach(Sensor s, listSensors)
-    {
-        if((s.rope.toInt()==rope) && (s.level.toInt()==level))     return s.type;
-    }
-    return "---";
+QString Worker::getSensorType(QString sensorMAC)
+{
+    if(sensorMAC.left(2)=="28") return "DS18S20";
+    if(sensorMAC.left(2)=="10") return "DS18B20";
+    if(sensorMAC.left(2)=="26") return "DS18S20";
+    return ("UNKNOWN");
 }

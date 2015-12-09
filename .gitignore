@@ -1,0 +1,4 @@
+main.o
+worker.o
+moc_worker.o
+moc_worker.cpp
