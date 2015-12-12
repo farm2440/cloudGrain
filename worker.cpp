@@ -319,9 +319,9 @@ void Worker::timerTick(void)
                 strData =  dataHeader;
                 strData += (sens.mac + ";");
                 strData += (sens.value + ";");
-                strData += timestamp;
+                strData += (timestamp + "|");
 
-                strData +="]]>|";
+                strData +="]]>";
                 strData +="</string>";
                 postData.clear();
                 postData=strData.toUtf8();
