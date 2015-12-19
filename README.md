@@ -29,3 +29,9 @@
 09/12/2015
   1.0.39 - от settings.xml са махнати type,guid и secret за сензорите и не се пращат с POST.
   Преработена и функцията getSensorType като по подаден MAC връща низ с типа
+
+19/12/2015
+TODO:
+- файла settings.xml да стане blueprint.xml
+- файла blueprint.xml се ползва без промяна за GPM и за cGateSIM
+- навсякъде rope се заменя с cable
