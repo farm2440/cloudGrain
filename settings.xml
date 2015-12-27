@@ -1,7 +1,7 @@
 <cGate>
         <configName>Test</configName>
         
-<postURL>http://siloservice.azurewebsites.net/DeviceService.svc/writesensor</postURL>
+        <postURL>http://siloservice.azurewebsites.net/DeviceService.svc/writesensor</postURL>
         <customer>ACME</customer>
         <customerId>10E36F67-570D-4B82-B4EB-B20831AAAD5B</customerId>
         <email>s_stavrev@hotmail.com</email>
@@ -23,59 +23,59 @@
 
         <silo siloName="Silo number 3" siloId="10E36F67-570D-4B82-B4EB-B20831AAAD5B">
              <controller line="1" rs485="0" version="1">
-<!-- ROPE 1 -->
+<!-- cable 1 -->
                   <sensor>
-                      <rope>1</rope>
+                      <cable>1</cable>
                       <level>1</level>
 		      <mac>28FF05253C040035</mac>
                   </sensor>
                   <sensor>
-                      <rope>1</rope>
+                      <cable>1</cable>
                       <level>2</level>
                       <mac>28FF04093A04004B</mac>
                   </sensor>
                   <sensor>
-                      <rope>1</rope>
+                      <cable>1</cable>
                       <level>3</level>
                       <mac>28FF22173B0400A9</mac>
                   </sensor>
                   <sensor>
-                      <rope>1</rope>
+                      <cable>1</cable>
                       <level>4</level>
                       <mac>28FF2E053A04001C</mac>
                   </sensor>
                   <sensor>
-                      <rope>1</rope>
+                      <cable>1</cable>
                       <level>5</level>
                       <mac>28FF602B3C0400E3</mac>
                   </sensor>
                   <sensor>
-                      <rope>1</rope>
+                      <cable>1</cable>
                       <level>6</level>
 		      <mac>28FF50093A0400C1</mac>
                   </sensor>
                   <sensor>
-                      <rope>1</rope>
+                      <cable>1</cable>
                       <level>7</level>
                       <mac>28FF441A3B0400B9</mac>
                   </sensor>
                   <sensor>
-                      <rope>1</rope>
+                      <cable>1</cable>
                       <level>8</level>
                       <mac>28FF2A2B3C0400B7</mac>
                   </sensor>
                   <sensor>
-                      <rope>1</rope>
+                      <cable>1</cable>
                       <level>9</level>
                       <mac>28FF50053A0400D3</mac>
                   </sensor>
                   <sensor>
-                      <rope>1</rope>
+                      <cable>1</cable>
                       <level>10</level>
                       <mac>28FF040A3A0400C3</mac>
                   </sensor>
                   <sensor>
-                      <rope>1</rope>
+                      <cable>1</cable>
                       <level>11</level>
                       <mac>28FFFB263C0400B9</mac>
                   </sensor>

@@ -24,6 +24,7 @@
 #include <QNetworkReply>
 #include <QUrl>
 
+
 //#include <iostream>
 #include <fstream>
 #include <unistd.h> //usleep()
@@ -53,7 +54,7 @@ struct Settings
 struct Sensor
 {
     QString mac;
-    QString rope;
+    QString cable;
     QString level;
 
     QString value;
@@ -81,7 +82,7 @@ public:
     Settings settings;
     QList<Sensor> listSensors;
     QList<Controller> listControllers;
-    QList<int> listRopes;// Списък с номерата на въжетата прочетени от settings.xml
+    QList<int> listCables;// Списък с номерата на въжетата прочетени от settings.xml
     QList<int> listLevels;// Списък с нивата на сензорите прочетени от settings.xml
                           //най-долния сензор е ниво 0 и растат нагоре
     QTime time;
@@ -112,8 +113,8 @@ public slots:
     bool exportRamFile_Version();
     bool exportRamFile_Error(QString errMsg);
 
-    QString getSensorValue(int rope, int level); //Връща стойността за сензор от listSensors    
-    QString getSensorMac(int rope, int level);
+    QString getSensorValue(int cable, int level); //Връща стойността за сензор от listSensors
+    QString getSensorMac(int cable, int level);
     QString getSensorType(QString sensorMAC);
 };
 

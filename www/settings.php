@@ -21,14 +21,18 @@
 
 	<tr>
 		<td id="logo">
-			<img src="logo.jpeg" width="213" height="120" alt="LOGO" longdesc="Etherino logo">
+			<img src="logo.png" width="213" height="120" alt="LOGO" longdesc="Etherino logo">
  		</td>
  		<td id="header">
-				<h1>ThermoLog cGate</h1>
+			<table id="layoutTable">
+			<tr><td><img src="cGate-logo.png" width="213" height="60" alt="LOGO" longdesc="Etherino logo"></td></tr>
+			<tr><td>				
 				<?php
 					$sensors = file_get_contents('/mnt/ramdisk/version.html');
 					echo $sensors;
   				?>
+			</td></tr>
+			</table>
 		</td>
 	</tr>
 	
